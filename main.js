@@ -55,65 +55,54 @@ function nextQuestion() {
 
 
 
-function renderMainUI(title, desc) {
+function renderMainUI(title, description) {
     document.getElementById("main-title").innerHTML = title;
-    document.getElementById("main-desc").innerHTML = desc;
+    document.getElementById("main-desc").innerHTML = description;
 }
 
 function renderQuestions(current_quest) {
     question = questions[current_quest];
     bg_image = `background-image: url(${question.img})`;
-    // window.alert(bg_image);
     document.getElementById("question-container").setAttribute("style", bg_image);
     document.getElementById("question-container").style.height = "300px";
     document.getElementById("question-container").style.width = "500px";
-    // document.getElementById("question-container").style.backgroundImage = bg_image;
     
     document.getElementById("qtitle").innerHTML = question.title;
     document.getElementById("qtype").innerHTML = question.question_type;
     
-    // render answers
+    // Render answers
     let div = document.getElementById("qanswers");
     div.innerHTML = '';
-    if (question.question_type == "mutiplechoice-single"){
-        let ol = document.createElement("OL");
-        let pAnswers = question.possible_answers;
-        pAnswers.forEach(answer => {
-            let li = document.createElement("LI");
-            let text = document.createTextNode(answer.caption);
-
-            li.appendChild(text);
-            ol.appendChild(li);
-            div.appendChild(ol);
-        });
-    } else if(question.question_type == "truefalse") {
-        let btn_true = document.createElement("Button");
-        btn_true.setAttribute("id", "1");
-        btn_true.innerHTML = "TRUE";
-
-        let btn_false = document.createElement("Button");
-        btn_false.setAttribute("id", "0");
-        btn_false.innerHTML = "FALSE" ;
-
-        div.appendChild(btn_true);
-        div.appendChild(btn_false);
+    if (question.question_type == "mutiplechoice-single" || question.question_type == "mutiplechoice-multiple") {
+        renderMultipleChoice(div);
     } else {
-        let ol = document.createElement("OL");
-        let pAnswers = question.possible_answers;
-        pAnswers.forEach(answer => {
-            let li = document.createElement("LI");
-            let text = document.createTextNode(answer.caption);
-            li.appendChild(text);
-            ol.appendChild(li);
-            div.appendChild(ol);
-        });
-    }
+        renderTruefalse(div);
+    } 
 }
 
+function renderTruefalse(container){
+    let btn_true = document.createElement("Button");
+    btn_true.setAttribute("id", "1");
+    btn_true.innerHTML = "TRUE";
+    let btn_false = document.createElement("Button");
+    btn_false.setAttribute("id", "0");
+    btn_false.innerHTML = "FALSE" ;
 
+    container.appendChild(btn_true);
+    container.appendChild(btn_false);
+}
 
-
-
+function renderMultipleChoice(container){
+    let ol = document.createElement("OL");
+    let pAnswers = question.possible_answers;
+    pAnswers.forEach(answer => {
+        let li = document.createElement("LI");
+        let text = document.createTextNode(answer.caption);
+        li.appendChild(text);
+        ol.appendChild(li);
+        container.appendChild(ol);
+    });
+}
 
 /**
  * returns {Boolean}
