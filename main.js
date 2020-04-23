@@ -39,8 +39,8 @@ function getData(url) {
 }
 
 function nextQuestion() {
-    // FIXME:
     if(current_quest != -1) {
+        // Get user Answer
         let ans = getAnswer(questions[current_quest]);
         console.log(`Selected answer: ${ans}`);
         answers.push(
@@ -56,6 +56,9 @@ function nextQuestion() {
     // Check if  it is the  last question
    if (current_quest < questions.length) renderQuestions(current_quest); 
    else {
+       let result = evaluateAnswers();
+       console.log("Your results:\n");
+       console.log(result);
        current_quest = -1;
        window.alert("Lets see your results");
    }
@@ -68,15 +71,14 @@ function getAnswer(question) {
         const ele = document.getElementsByName(type); 
         for(i = 0; i < ele.length; i++) { 
             if(ele[i].checked) 
-            return ele[i].getAttribute("id");
+            return ele[i].getAttribute("value");
         } 
     }else if(type === "mutiplechoice-multiple") {
-        // FIXME:
         let selected = [];
         const ele = document.getElementsByName(type); 
         for(i = 0; i < ele.length; i++) { 
             if(ele[i].checked) 
-            selected.push(ele[i].getAttribute("id"));
+            selected.push(ele[i].getAttribute("value"));
         }
         return selected; 
     }else { 
@@ -86,7 +88,6 @@ function getAnswer(question) {
             return ele[i].getAttribute("value");
         } 
     }
-
 }
 
 function evaluateAnswers() {
@@ -96,19 +97,22 @@ function evaluateAnswers() {
         "points": 0
     };
     answers.forEach(answer => {
-        let current_question = questions.findIndex(question => answer.q_id == question.q_id);
+        let quest_index = questions.findIndex(question => answer.q_id == question.q_id);
+        let current_question = questions[quest_index];
+        
         if (current_question.question_type == "mutiplechoice-single") {
+            console.log("mutiplechoice-single");
             if (answer.a_id == current_question.correct_answer) {
                 // Correct  Answer
                 points = points + current_question.points;
                 results.points += current_question.points;
                 results.right_qsts.push(answer.q_id);
             } else {
-                // Wrong Answer
+                // Correct Answer
                 results.wrong_qsts.push(answer.q_id);
             }
         }
-        else if (question.question_type == "mutiplechoice-multiple") {
+        else if(current_question.question_type == "mutiplechoice-multiple") {
             if(areArraysEqualSets(answer.a_id, current_question.correct_answer)) {
                 // Correct  Answer
                 points = points + current_question.points;
@@ -128,8 +132,11 @@ function evaluateAnswers() {
             }                
         } 
     });
+    return results;
 
     function areArraysEqualSets(a1, a2) {
+        a1 =  a1.map(String);
+        a2 = a2.map(String);
         let superSet = {};
         for (let i = 0; i < a1.length; i++) {
           const e = a1[i] + typeof a1[i];
@@ -149,7 +156,6 @@ function evaluateAnswers() {
         }
         return true;
     }
-    return results;
  }
 
 //  Render Functions
@@ -221,17 +227,12 @@ function renderMultipleChoice(container, question) {
     pAnswers.forEach(answer => {
         let domString =
         `<label class="container"> ${answer.caption}
-            <input type="${input_type}" id="${answer.a_id}" name="${question.question_type}" >
+            <input type="${input_type}" value="${answer.a_id}" name="${question.question_type}" >
             <span class="checkmark"></span>
         </label>
         </br>`;
         let html = parser.parseFromString(domString, 'text/html'); 
         container.appendChild (html.documentElement);
     });
-
-
 }
-
-
-
  window.onload = initializeUI;
