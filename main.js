@@ -125,8 +125,8 @@ function renderMainUI(title, description) {
 
 function renderQuestions(current_quest) {
     // Render Question
-    question = questions[current_quest];
-    bg_image = `background-image: url(${question.img})`;
+    let question = questions[current_quest];
+    let bg_image = `background-image: url(${question.img})`;
     document.getElementById("question-container").setAttribute("style", bg_image);
     document.getElementById("question-container").style.height = "300px";
     document.getElementById("question-container").style.width = "500px";
@@ -138,13 +138,13 @@ function renderQuestions(current_quest) {
     let div = document.getElementById("qanswers");
     div.innerHTML = '';
     if (question.question_type == "mutiplechoice-single" || question.question_type == "mutiplechoice-multiple") {
-        renderMultipleChoice(div);
+        renderMultipleChoice(div, question);
     } else {
         renderTruefalse(div);
     } 
 }
 
-function renderTruefalse(container){
+function renderTruefalse(container) {
     let btn_true = document.createElement("Button");
     btn_true.setAttribute("id", "1");
     btn_true.innerHTML = "TRUE";
@@ -157,7 +157,7 @@ function renderTruefalse(container){
 }
 
 
-function renderMultipleChoice(container) {
+function renderMultipleChoice(container, question) {
     let pAnswers = question.possible_answers;
     pAnswers.forEach(answer => {
         const input = document.createElement("INPUT");
