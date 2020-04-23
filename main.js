@@ -39,9 +39,20 @@ function getData(url) {
 }
 
 function nextQuestion() {
+    // FIXME:
+    if(current_quest != -1) {
+        let ans = getAnswer(questions[current_quest]);
+        console.log(`Selected answer: ${ans}`);
+        answers.push(
+            {
+                "q_id": questions[current_quest].q_id,
+                "a_id": ans
+            }
+        );
+    }
+
     current_quest++;
     console.log(`current question index:${current_quest}`);
-
     // Check if  it is the  last question
    if (current_quest < questions.length) renderQuestions(current_quest); 
    else {
@@ -49,6 +60,33 @@ function nextQuestion() {
        window.alert("Lets see your results");
    }
     // TODO: Check if answer is valid
+}
+
+function getAnswer(question) {
+    let type =  question.question_type;
+    if(type === "mutiplechoice-single") {
+        const ele = document.getElementsByName(type); 
+        for(i = 0; i < ele.length; i++) { 
+            if(ele[i].checked) 
+            return ele[i].getAttribute("id");
+        } 
+    }else if(type === "mutiplechoice-multiple") {
+        // FIXME:
+        let selected = [];
+        const ele = document.getElementsByName(type); 
+        for(i = 0; i < ele.length; i++) { 
+            if(ele[i].checked) 
+            selected.push(ele[i].getAttribute("id"));
+        }
+        return selected; 
+    }else { 
+        const ele = document.getElementsByName(type); 
+        for(i = 0; i < ele.length; i++) { 
+            if(ele[i].checked) 
+            return ele[i].getAttribute("value");
+        } 
+    }
+
 }
 
 function evaluateAnswers() {
@@ -114,8 +152,6 @@ function evaluateAnswers() {
     return results;
  }
 
-
-
 //  Render Functions
 
 function renderMainUI(title, description) {
@@ -145,35 +181,55 @@ function renderQuestions(current_quest) {
 }
 
 function renderTruefalse(container) {
-    let btn_true = document.createElement("Button");
-    btn_true.setAttribute("id", "1");
-    btn_true.innerHTML = "TRUE";
-    let btn_false = document.createElement("Button");
-    btn_false.setAttribute("id", "0");
-    btn_false.innerHTML = "FALSE" ;
+    const input_true = document.createElement("INPUT");
+    input_true.setAttribute("type", "radio");
+    input_true.setAttribute("id", 'true-radio');
+    input_true.setAttribute("name", "truefalse");
+    input_true.setAttribute("value", "true");
 
-    container.appendChild(btn_true);
-    container.appendChild(btn_false);
+    const label_true = document.createElement("LABEL");
+    label_true.setAttribute("for", "true-radio");
+    const caption_t = document.createTextNode("TRUE");
+    label_true.appendChild(caption_t);
+
+    const input_false = document.createElement("INPUT");
+    input_false.setAttribute("type", "radio");
+    input_false.setAttribute("id", "false-radio");
+    input_false.setAttribute("name", "truefalse");
+    input_false.setAttribute("value", "false");
+
+    const label_false = document.createElement("LABEL");
+    label_false.setAttribute("for", "false-radio");
+    const caption_f = document.createTextNode("FALSE");
+    label_false.appendChild(caption_f);
+
+    const br = document.createElement("BR");
+    container.appendChild(input_true);
+    container.appendChild(label_true);
+    container.appendChild(br);
+    container.appendChild(input_false);
+    container.appendChild(label_false);
 }
 
 
 function renderMultipleChoice(container, question) {
+    let parser = new DOMParser();
     let pAnswers = question.possible_answers;
+    let input_type;
+    if (question.question_type === "mutiplechoice-multiple") input_type = "checkbox";
+    else input_type = "radio";
     pAnswers.forEach(answer => {
-        const input = document.createElement("INPUT");
-        input.setAttribute("type", "radio");
-        input.setAttribute("id", answer.a_id);
-        input.setAttribute("name", "single-choice");
-    
-        const label = document.createElement("LABEL");
-        label.setAttribute("for", answer.a_id);
-        const caption_text = document.createTextNode(answer.caption);
-        label.appendChild(caption_text);
-        const br = document.createElement("BR");
-        container.appendChild(input);
-        container.appendChild(label);
-        container.appendChild(br);
+        let domString =
+        `<label class="container"> ${answer.caption}
+            <input type="${input_type}" id="${answer.a_id}" name="${question.question_type}" >
+            <span class="checkmark"></span>
+        </label>
+        </br>`;
+        let html = parser.parseFromString(domString, 'text/html'); 
+        container.appendChild (html.documentElement);
     });
+
+
 }
 
 
