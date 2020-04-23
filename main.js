@@ -10,8 +10,6 @@ let questions = [];
 let answers = [];  // {q_id: 1 , a_id:2}
 let points = 0;
 
-
-
 async function initializeUI() {
     try {
         data = await getData(quizUrl);
@@ -56,37 +54,64 @@ function nextQuestion() {
 function evaluateAnswers() {
     let results = {
         "wrong_qsts": [],
-        "right_qsts": []
+        "right_qsts": [],
+        "points": 0
     };
-    
     answers.forEach(answer => {
         let current_question = questions.findIndex(question => answer.q_id == question.q_id);
         if (current_question.question_type == "mutiplechoice-single") {
-            // Wright  Answer
             if (answer.a_id == current_question.correct_answer) {
+                // Correct  Answer
                 points = points + current_question.points;
+                results.points += current_question.points;
                 results.right_qsts.push(answer.q_id);
-            }
-            else {
+            } else {
                 // Wrong Answer
                 results.wrong_qsts.push(answer.q_id);
             }
         }
         else if (question.question_type == "mutiplechoice-multiple") {
-
-    
-        } else {
+            if(areArraysEqualSets(answer.a_id, current_question.correct_answer)) {
+                // Correct  Answer
+                points = points + current_question.points;
+                results.points += current_question.points;
+                results.right_qsts.push(answer.q_id);
+            } else {
+                // Wrong Answer
+                results.wrong_qsts.push(answer.q_id);
+            }
+        }else { // TrueFalse Case
+            if (answer.a_id, current_question.correct_answer) {
+                results.points += current_question.points;
+                points = points + current_question.points;
+                results.right_qsts.push(answer.q_id);
+            }else {
+                results.wrong_qsts.push(answer.q_id);
+            }                
         } 
-    
-        
     });
 
-    //  Take into acccount if right anwers are more than one
-    // Different Cases
-    // mutiplechoice-single
-    // mutiplechoice-multiple
-
-    //  return true or false
+    function areArraysEqualSets(a1, a2) {
+        let superSet = {};
+        for (let i = 0; i < a1.length; i++) {
+          const e = a1[i] + typeof a1[i];
+          superSet[e] = 1;
+        }
+        for (let i = 0; i < a2.length; i++) {
+          const e = a2[i] + typeof a2[i];
+          if (!superSet[e]) {
+            return false;
+          }
+          superSet[e] = 2;
+        }
+        for (let e in superSet) {
+          if (superSet[e] === 1) {
+            return false;
+          }
+        }
+        return true;
+    }
+    return results;
  }
 
 
