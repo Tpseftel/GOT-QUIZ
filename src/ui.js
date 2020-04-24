@@ -126,13 +126,14 @@ function renderMultipleChoice(container_id, question) {
  * @param {String} container_id 
  * @param {Object} result 
  */
-function renderResults(container_id, result) {
+function renderResults(container_id, result, user_percent) {
     let container = document.getElementById(container_id);
     container.innerHTML = '';
     let domString = `   
         <div id="result-title">${result.title}</div>
         <div id="result-message">${result.message} </div>
         <div id="result-image" style="background-image: url(${result.img});height: 300px;width: 300px;"> </div>
+        <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
     `;
     let html = parser.parseFromString(domString, 'text/html');
     container.appendChild(html.documentElement);

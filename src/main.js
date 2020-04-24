@@ -28,7 +28,7 @@ async function initializeUI() {
         renderMainUI(quiz.title, quiz.description, current_index);
         renderQuestion(current_index);
         displayQuestions(true);
-        // displayResults();
+        document.getElementById("main-container").style.display = "block";
     } catch (error) {
         console.log(`Error:${error.message}`);
     }
@@ -90,10 +90,11 @@ function nextQuestion() {
 
 async function displayResults() {
     displayQuestions(false);
-    const result_percent = calculateUserResult(questions, user_result.points);
-    console.log(`Result Percent ${result_percent}`);
-    let result_message = getResultMessage(result_percent);
-    renderResults("result-infos", result_message);
+    const user_percent = calculateUserResult(questions, user_result.points);
+    console.log(`Result Percent ${user_percent}`);
+    let result_message = getResultMessage(user_percent);
+    renderResults("result-infos", result_message, user_percent);
+    console.log(user_result);
 }
 
 /** 
@@ -204,7 +205,7 @@ function getAnswer(question) {
 
 /**
  * 
- * @param {JSON} questions 
+ * @param {Array} questions 
  * @param {Number} user_points 
  * @return {Number}  
  */
