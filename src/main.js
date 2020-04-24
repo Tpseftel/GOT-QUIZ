@@ -3,34 +3,40 @@
 // TODO: Use Local Storage for current question, score  and more
 const url_quiz = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
 const url_results = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
+
+let quiz_data ;
 let quiz = {};
 let result_messages = {};
-let current_index = 0;
+let current_index;
 let questions = [];
-let answers = [];  
-let user_result = {
-    "wrong_qsts": [],
-    "right_qsts": [],
-    "points": 0
-};
+let user_result ; 
 
 async function initializeUI() {
-
+    user_result = {
+        "wrong_qsts": [],
+        "right_qsts": [],
+        "points": 0
+    };
+    current_index = 0;
     try {
-        let quiz_data = await initializeCurrentQuiz();
+        if (!quiz_data){
+            quiz_data = await getData();
+        }
         quiz = quiz_data[0];
         result_messages = quiz_data[1];
         questions = quiz.questions;
         renderMainUI(quiz.title, quiz.description, current_index);
-        displayResults();
+        renderQuestion(current_index);
+        displayQuestions(true);
+        // displayResults();
     } catch (error) {
         console.log(`Error:${error.message}`);
     }
 }
-async function initializeCurrentQuiz() {
+async function getData() {
     let data_p = [];
-    const quiz_promise = getData(url_quiz);
-    const quiz_results = getData(url_results);
+    const quiz_promise = getDataAjax(url_quiz);
+    const quiz_results = getDataAjax(url_results);
 
     try {
      let raw_data = await Promise.all([quiz_promise, quiz_results]);
@@ -44,7 +50,7 @@ async function initializeCurrentQuiz() {
 }
 
 
-function getData(url) {
+function getDataAjax(url) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -65,13 +71,13 @@ function nextQuestion() {
     // Get user selected answer
     let user_answer = getAnswer(questions[current_index]);
     console.log(`Selected answer: ${user_answer}`);
-    // Save user answer
-    answers.push(
-        {
-            "q_id": questions[current_index].q_id,
-            "a_id": user_answer
-        }
-    );
+    // // Save user answer
+    // answers.push(
+    //     {
+    //         "q_id": questions[current_index].q_id,
+    //         "a_id": user_answer
+    //     }
+    // );
     validateAnswer(questions[current_index], user_answer);
     // Check if  it is the  last question
     if (current_index < questions.length - 1) {
@@ -83,30 +89,24 @@ function nextQuestion() {
 }
 
 async function displayResults() {
-    // TODO: Implementaion
     displayQuestions(false);
     const result_percent = calculateUserResult(questions, user_result.points);
     console.log(`Result Percent ${result_percent}`);
     let result_message = getResultMessage(result_percent);
-    console.log(user_result);
-    console.log("Your results:\n");
-    console.log(result_message);
+    renderResults("result-infos", result_message);
 }
 
-/**
+/** 
  * @param {Number} quiz_id
  * @param {Number} percent_result 
- * @returns {String}
+ * @returns {Object}
  */
 function getResultMessage(user_result, quiz_id=12) { 
     let messages = result_messages.results;
     messages.forEach(message => {
         if(user_result >= message.minpoints && user_result <=message.maxpoints) {
-            console.log(`Message: ${message.title}`);
-            message_p = message.title;
+            message_p = message;
         }
-        console.log(message_p);
-       
     });
     return message_p;
 }
@@ -218,6 +218,10 @@ function calculateUserResult(questions, user_points) {
     let percent_points = (100 / all_points) * user_points;   
 
     return percent_points;
+ }
+
+ function restartQuiz(){
+    initializeUI();
  }
 
  window.onload = initializeUI;
