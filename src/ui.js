@@ -1,4 +1,6 @@
+
 const parser = new DOMParser();
+
 function highlightCorrect(answers_c) {
     // let cor_elements = [];
     // let el;
@@ -73,34 +75,25 @@ function renderQuestion(index) {
 function renderTruefalse(container_id) {
     const container = document.getElementById(container_id);
     container.innerHTML = "";
-    const input_true = document.createElement("INPUT");
-    input_true.setAttribute("type", "radio");
-    input_true.setAttribute("id", 'true-radio');
-    input_true.setAttribute("name", "truefalse");
-    input_true.setAttribute("value", "true");
 
-    const label_true = document.createElement("LABEL");
-    label_true.setAttribute("for", "true-radio");
-    const caption_t = document.createTextNode("TRUE");
-    label_true.appendChild(caption_t);
+    let trueDomString =`
+        <label class="container"> TRUE
+            <input type="radio" value="true" name="truefalse" >
+            <span class="checkmark"></span>
+        </label>
+        </br>
+    `;
+    let falseDomString =`
+        <label class="container"> FALSE
+            <input type="radio" value="false" name="truefalse" >
+            <span class="checkmark"></span>
+        </label>
+    `;
+    let htmlFalse = parser.parseFromString(falseDomString, 'text/html'); 
+    let htmlTrue = parser.parseFromString(trueDomString, 'text/html'); 
 
-    const input_false = document.createElement("INPUT");
-    input_false.setAttribute("type", "radio");
-    input_false.setAttribute("id", "false-radio");
-    input_false.setAttribute("name", "truefalse");
-    input_false.setAttribute("value", "false");
-
-    const label_false = document.createElement("LABEL");
-    label_false.setAttribute("for", "false-radio");
-    const caption_f = document.createTextNode("FALSE");
-    label_false.appendChild(caption_f);
-
-    const br = document.createElement("BR");
-    container.appendChild(input_true);
-    container.appendChild(label_true);
-    container.appendChild(br);
-    container.appendChild(input_false);
-    container.appendChild(label_false);
+    container.appendChild(htmlTrue.documentElement);
+    container.appendChild(htmlFalse.documentElement);
 }
 
 /**
@@ -144,7 +137,6 @@ function renderResults(container_id, result) {
     let html = parser.parseFromString(domString, 'text/html');
     container.appendChild(html.documentElement);
 }
-
 
 /**
  * 
