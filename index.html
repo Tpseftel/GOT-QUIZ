@@ -14,17 +14,22 @@
 <div id="main-desc" style="color: blue;"></div>
     <h2 style="color: cadetblue;">Winter is here, wear yout jacket....</h2>
 
-<h1>Questions</h1>
-<div id=question-container>
-    <div id="qtitle"></div>
-    <div id="qtype"></div>
+<div id="questions-placeholder" style="display: block;">
+    <h1>Questions</h1>
+    <div id=question-container>
+        <div id="qtitle"></div>
+        <div id="qtype"></div>
+    </div>
+
+    <h2> Possible Answers</h2>
+
+    <div id=qanswers></div>
+    <button type="button" id="btn-next" onclick="nextQuestion()">Next</button>
 </div>
-
-<h2> Possible Answers</h2>
-
-<div id=qanswers></div>
-<button type="button" id="btn-next" onclick="nextQuestion()">Next</button>
-
+<div id="results-placeholder" style="display: none;">
+    <div id="result-message"></div>
+    <button type="button" id="btn-restart" onclick="">Play Again</button>
+</div>
 
     <script src="./src/ui.js"></script>
     <script src="./src/main.js"></script>

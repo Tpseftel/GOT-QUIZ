@@ -1,24 +1,2 @@
-let a1 = ["30","32"];
-let a2 = ["30","32"];
 
-console.log(areArraysEqualSets(a1, a2));
-function areArraysEqualSets(a1, a2) {
-    let superSet = {};
-    for (let i = 0; i < a1.length; i++) {
-      const e = a1[i] + typeof a1[i];
-      superSet[e] = 1;
-    }
-    for (let i = 0; i < a2.length; i++) {
-      const e = a2[i] + typeof a2[i];
-      if (!superSet[e]) {
-        return false;
-      }
-      superSet[e] = 2;
-    }
-    for (let e in superSet) {
-      if (superSet[e] === 1) {
-        return false;
-      }
-    }
-    return true;
-  }
+console.log((0/100)*0);

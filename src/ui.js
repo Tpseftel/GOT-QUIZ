@@ -105,3 +105,14 @@ function renderMultipleChoice(container, question) {
         container.appendChild (html.documentElement);
     });
 }
+
+function displayQuestions(confirm) {
+    if(confirm) {
+        document.getElementById("results-placeholder").style.display= "none";
+        document.getElementById("questions-placeholder").style.display= "block";
+    }else {
+         // Display results content
+        document.getElementById("questions-placeholder").style.display= "none";
+        document.getElementById("results-placeholder").style.display= "block";
+    }
+}

@@ -1,29 +1,48 @@
 // http://proto.io/en/jobs/candidate-questions/quiz.json
 // http://proto.io/en/jobs/candidate-questions/result.json
 // TODO: Use Local Storage for current question, score  and more
-const quizUrl = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
-const resultsUrl = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
+const url_quiz = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
+const url_results = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
 let quiz = {};
+let result_messages = {};
 let current_index = 0;
 let questions = [];
 let answers = [];  
-let points = 0;
-let results = {
+let user_result = {
     "wrong_qsts": [],
     "right_qsts": [],
     "points": 0
 };
 
 async function initializeUI() {
+
     try {
-        data = await getData(quizUrl);
-        let quiz = JSON.parse(data);
+        let quiz_data = await initializeCurrentQuiz();
+        quiz = quiz_data[0];
+        result_messages = quiz_data[1];
         questions = quiz.questions;
         renderMainUI(quiz.title, quiz.description, current_index);
+        displayResults();
     } catch (error) {
         console.log(`Error:${error.message}`);
     }
 }
+async function initializeCurrentQuiz() {
+    let data_p = [];
+    const quiz_promise = getData(url_quiz);
+    const quiz_results = getData(url_results);
+
+    try {
+     let raw_data = await Promise.all([quiz_promise, quiz_results]);
+     raw_data.forEach(data => {
+         data_p.push(JSON.parse(data));
+     });
+     return data_p;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 function getData(url) {
     return new Promise((resolve, reject) => {
@@ -42,30 +61,54 @@ function getData(url) {
 }
 
 function nextQuestion() {
-    if(current_index != -1) {
-        // Get user Answer
-        let ans = getAnswer(questions[current_index]);
-        console.log(`Selected answer: ${ans}`);
-        answers.push(
-            {
-                "q_id": questions[current_index].q_id,
-                "a_id": ans
-            }
-        );
-        validateAnswer(questions[current_index], ans);
-    }
-    current_index++;
     console.log(`current question index:${current_index}`);
+    // Get user selected answer
+    let user_answer = getAnswer(questions[current_index]);
+    console.log(`Selected answer: ${user_answer}`);
+    // Save user answer
+    answers.push(
+        {
+            "q_id": questions[current_index].q_id,
+            "a_id": user_answer
+        }
+    );
+    validateAnswer(questions[current_index], user_answer);
     // Check if  it is the  last question
-   if (current_index < questions.length) renderQuestion(current_index); 
-   else {
-       let result = evaluateAnswers();
-       console.log("Your results:\n");
-       console.log(result);
-       current_index = -1;
-       window.alert("Lets see your results");
+    if (current_index < questions.length - 1) {
+        current_index++;
+        renderQuestion(current_index); 
+    }else {
+        displayResults();
    }
-    
+}
+
+async function displayResults() {
+    // TODO: Implementaion
+    displayQuestions(false);
+    const result_percent = calculateUserResult(questions, user_result.points);
+    console.log(`Result Percent ${result_percent}`);
+    let result_message = getResultMessage(result_percent);
+    console.log(user_result);
+    console.log("Your results:\n");
+    console.log(result_message);
+}
+
+/**
+ * @param {Number} quiz_id
+ * @param {Number} percent_result 
+ * @returns {String}
+ */
+function getResultMessage(user_result, quiz_id=12) { 
+    let messages = result_messages.results;
+    messages.forEach(message => {
+        if(user_result >= message.minpoints && user_result <=message.maxpoints) {
+            console.log(`Message: ${message.title}`);
+            message_p = message.title;
+        }
+        console.log(message_p);
+       
+    });
+    return message_p;
 }
 /**
  * 
@@ -76,34 +119,34 @@ function validateAnswer(question, answer_id){
         if (question.question_type == "mutiplechoice-single") {
             if (answer_id == question.correct_answer) {
                 // Correct  Answer
-                results.points += question.points;
-                results.right_qsts.push(question.q_id);
+                user_result.points += question.points;
+                user_result.right_qsts.push(question.q_id);
             } else {
                 // Wrong Answer
-                results.wrong_qsts.push(question.q_id);
+                user_result.wrong_qsts.push(question.q_id);
                 highlightCorrect(question.correct_answer);
             }
         }
         else if(question.question_type == "mutiplechoice-multiple") {
             if(areArraysEqualSets(answer_id, question.correct_answer)) {
                 // Correct  Answer
-                results.points += question.points;
-                results.right_qsts.push(question.q_id);
+                user_result.points += question.points;
+                user_result.right_qsts.push(question.q_id);
             } else {
                 // Wrong Answer
-                results.wrong_qsts.push(question.q_id);
+                user_result.wrong_qsts.push(question.q_id);
                 highlightCorrect(question.correct_answer);
             }
         }else { 
             if (answer_id.localeCompare(question.correct_answer) == 0) {
-                results.points += question.points;
-                results.right_qsts.push(question.q_id);
+                user_result.points += question.points;
+                user_result.right_qsts.push(question.q_id);
             }else {
-                results.wrong_qsts.push(question.q_id);
+                user_result.wrong_qsts.push(question.q_id);
                 highlightCorrect(question.correct_answer);
             }                
         } 
-    return results;
+    return user_result;
 
     function areArraysEqualSets(a1, a2) {
         a1 =  a1.map(String);
@@ -159,8 +202,22 @@ function getAnswer(question) {
     }
 }
 
-function evaluateAnswers() {
-    return results;
+/**
+ * 
+ * @param {JSON} questions 
+ * @param {Number} user_points 
+ * @return {Number}  
+ */
+function calculateUserResult(questions, user_points) {
+    if(user_points == 0) return 0;
+
+    let all_points = 0 ;
+    questions.forEach(question => {
+        all_points += question.points;
+    });
+    let percent_points = (100 / all_points) * user_points;   
+
+    return percent_points;
  }
 
  window.onload = initializeUI;
