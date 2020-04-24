@@ -57,7 +57,7 @@ function nextQuestion() {
     current_index++;
     console.log(`current question index:${current_index}`);
     // Check if  it is the  last question
-   if (current_index < questions.length) renderQuestions(current_index); 
+   if (current_index < questions.length) renderQuestion(current_index); 
    else {
        let result = evaluateAnswers();
        console.log("Your results:\n");
