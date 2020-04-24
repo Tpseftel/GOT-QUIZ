@@ -31,13 +31,14 @@ function highlightCorrect(answers_c) {
       
 }
 
-function renderMainUI(title, description) {
-    document.getElementById("main-title").innerHTML = title;
-    document.getElementById("main-desc").innerHTML = description;
+function renderMainUI(qtitle, qdescription, current_index) {
+    document.getElementById("main-title").innerHTML = qtitle;
+    document.getElementById("main-desc").innerHTML = qdescription;
+    renderQuestions(current_index);
 }
 
-function renderQuestions(current_quest) {
-    let question = questions[current_quest];
+function renderQuestions(index) {
+    let question = questions[index];
     let bg_image = `background-image: url(${question.img})`;
     document.getElementById("question-container").setAttribute("style", bg_image);
     document.getElementById("question-container").style.height = "300px";

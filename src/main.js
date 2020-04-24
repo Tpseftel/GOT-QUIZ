@@ -4,7 +4,7 @@
 const quizUrl = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
 const resultsUrl = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
 let quiz = {};
-let current_quest = -1;
+let current_index = 0;
 let questions = [];
 let answers = [];  
 let points = 0;
@@ -19,8 +19,7 @@ async function initializeUI() {
         data = await getData(quizUrl);
         let quiz = JSON.parse(data);
         questions = quiz.questions;
-        renderMainUI(quiz.title, quiz.description);
-        nextQuestion();    
+        renderMainUI(quiz.title, quiz.description, current_index);
     } catch (error) {
         console.log(`Error:${error.message}`);
     }
@@ -43,27 +42,27 @@ function getData(url) {
 }
 
 function nextQuestion() {
-    if(current_quest != -1) {
+    if(current_index != -1) {
         // Get user Answer
-        let ans = getAnswer(questions[current_quest]);
+        let ans = getAnswer(questions[current_index]);
         console.log(`Selected answer: ${ans}`);
         answers.push(
             {
-                "q_id": questions[current_quest].q_id,
+                "q_id": questions[current_index].q_id,
                 "a_id": ans
             }
         );
-        validateAnswer(questions[current_quest], ans);
+        validateAnswer(questions[current_index], ans);
     }
-    current_quest++;
-    console.log(`current question index:${current_quest}`);
+    current_index++;
+    console.log(`current question index:${current_index}`);
     // Check if  it is the  last question
-   if (current_quest < questions.length) renderQuestions(current_quest); 
+   if (current_index < questions.length) renderQuestions(current_index); 
    else {
        let result = evaluateAnswers();
        console.log("Your results:\n");
        console.log(result);
-       current_quest = -1;
+       current_index = -1;
        window.alert("Lets see your results");
    }
     
