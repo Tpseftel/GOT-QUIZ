@@ -7,8 +7,13 @@ const resultsUrl = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
 let quiz = {};
 let current_quest = -1;
 let questions = [];
-let answers = [];  // {q_id: 1 , a_id:2}
+let answers = [];  
 let points = 0;
+let results = {
+    "wrong_qsts": [],
+    "right_qsts": [],
+    "points": 0
+};
 
 async function initializeUI() {
     try {
@@ -49,8 +54,9 @@ function nextQuestion() {
                 "a_id": ans
             }
         );
+        validateAnswer(questions[current_quest], ans);
+        
     }
-
     current_quest++;
     console.log(`current question index:${current_quest}`);
     // Check if  it is the  last question
@@ -62,9 +68,110 @@ function nextQuestion() {
        current_quest = -1;
        window.alert("Lets see your results");
    }
-    // TODO: Check if answer is valid
+    
+}
+/**
+ * 
+ * @param {Object} question Question object
+ * @param {*} answer_id  The id of the user's answer
+ */
+function validateAnswer(question, answer_id){
+        if (question.question_type == "mutiplechoice-single") {
+            if (answer_id == question.correct_answer) {
+                // Correct  Answer
+                results.points += question.points;
+                results.right_qsts.push(question.q_id);
+            } else {
+                // Wrong Answer
+                results.wrong_qsts.push(question.q_id);
+                highlightCorrect(question.correct_answer);
+            }
+        }
+        else if(question.question_type == "mutiplechoice-multiple") {
+            if(areArraysEqualSets(answer_id, question.correct_answer)) {
+                // Correct  Answer
+                results.points += question.points;
+                results.right_qsts.push(question.q_id);
+            } else {
+                // Wrong Answer
+                results.wrong_qsts.push(question.q_id);
+                highlightCorrect(question.correct_answer);
+            }
+        }else { 
+            if (answer_id.localeCompare(question.correct_answer) == 0) {
+                results.points += question.points;
+                results.right_qsts.push(question.q_id);
+            }else {
+                results.wrong_qsts.push(question.q_id);
+                highlightCorrect(question.correct_answer);
+            }                
+        } 
+    return results;
+
+    function areArraysEqualSets(a1, a2) {
+        a1 =  a1.map(String);
+        a2 = a2.map(String);
+        let superSet = {};
+        for (let i = 0; i < a1.length; i++) {
+          const e = a1[i] + typeof a1[i];
+          superSet[e] = 1;
+        }
+        for (let i = 0; i < a2.length; i++) {
+          const e = a2[i] + typeof a2[i];
+          if (!superSet[e]) {
+            return false;
+          }
+          superSet[e] = 2;
+        }
+        for (let e in superSet) {
+          if (superSet[e] === 1) {
+            return false;
+          }
+        }
+        return true;
+    }
 }
 
+function highlightCorrect(answers_c) {
+    // let cor_elements = [];
+    // let el;
+    // if(Array.isArray(answers_c)){
+    //     answers_c.forEach(ans => {
+    //       el =   document.getElementById(c);
+    //       myFunction(el,"correct-answers");
+    //     });
+    // }else {
+    //     el = document.getElementById(answers_c);
+    //     myFunction(el,"correct-answers");
+    // }
+    // function sleep(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    // }
+    // (async()=>{
+    //     //Do some stuff
+    //     await sleep(3000);
+    //     alert("hello");
+    //   })();
+      
+
+    // alert(`wrong answer bitch \n the correct is:${questions[current_quest].correct_answer}`);
+    function myFunction(element, class_name) {
+        let arr;
+        arr = element.className.split(" ");
+        if (arr.indexOf(class_name) == -1) {
+          element.className += " " + class_name;
+        }
+      }
+      
+}
+
+
+
+/**
+ * 
+ * @param {Object} question 
+ * returns {String}
+ */
 function getAnswer(question) {
     let type =  question.question_type;
     if(type === "mutiplechoice-single") {
@@ -91,71 +198,7 @@ function getAnswer(question) {
 }
 
 function evaluateAnswers() {
-    let results = {
-        "wrong_qsts": [],
-        "right_qsts": [],
-        "points": 0
-    };
-    answers.forEach(answer => {
-        let quest_index = questions.findIndex(question => answer.q_id == question.q_id);
-        let current_question = questions[quest_index];
-        
-        if (current_question.question_type == "mutiplechoice-single") {
-            console.log("mutiplechoice-single");
-            if (answer.a_id == current_question.correct_answer) {
-                // Correct  Answer
-                points = points + current_question.points;
-                results.points += current_question.points;
-                results.right_qsts.push(answer.q_id);
-            } else {
-                // Correct Answer
-                results.wrong_qsts.push(answer.q_id);
-            }
-        }
-        else if(current_question.question_type == "mutiplechoice-multiple") {
-            if(areArraysEqualSets(answer.a_id, current_question.correct_answer)) {
-                // Correct  Answer
-                points = points + current_question.points;
-                results.points += current_question.points;
-                results.right_qsts.push(answer.q_id);
-            } else {
-                // Wrong Answer
-                results.wrong_qsts.push(answer.q_id);
-            }
-        }else { // TrueFalse Case
-            if (answer.a_id, current_question.correct_answer) {
-                results.points += current_question.points;
-                points = points + current_question.points;
-                results.right_qsts.push(answer.q_id);
-            }else {
-                results.wrong_qsts.push(answer.q_id);
-            }                
-        } 
-    });
     return results;
-
-    function areArraysEqualSets(a1, a2) {
-        a1 =  a1.map(String);
-        a2 = a2.map(String);
-        let superSet = {};
-        for (let i = 0; i < a1.length; i++) {
-          const e = a1[i] + typeof a1[i];
-          superSet[e] = 1;
-        }
-        for (let i = 0; i < a2.length; i++) {
-          const e = a2[i] + typeof a2[i];
-          if (!superSet[e]) {
-            return false;
-          }
-          superSet[e] = 2;
-        }
-        for (let e in superSet) {
-          if (superSet[e] === 1) {
-            return false;
-          }
-        }
-        return true;
-    }
  }
 
 //  Render Functions
@@ -226,7 +269,7 @@ function renderMultipleChoice(container, question) {
     else input_type = "radio";
     pAnswers.forEach(answer => {
         let domString =
-        `<label class="container"> ${answer.caption}
+        `<label class="container" id="${answer.a_id}" > ${answer.caption}
             <input type="${input_type}" value="${answer.a_id}" name="${question.question_type}" >
             <span class="checkmark"></span>
         </label>

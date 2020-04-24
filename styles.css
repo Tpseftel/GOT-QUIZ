@@ -1,3 +1,5 @@
+
+/*  Checkboxes  */
 .container {
     display: block;
     position: relative;
@@ -63,4 +65,9 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+  }
+  /*  Checkboxes END */
+  .correct-answers{
+    background-color: red !important;
+    color: #2196F3!important;
   }
