@@ -70,14 +70,13 @@ function nextQuestion() {
     console.log(`current question index:${current_index}`);
     // Get user selected answer
     let user_answer = getAnswer(questions[current_index]);
+    if(!user_answer) {
+        alert("Select an Answer....");
+        return;
+    }
+
     console.log(`Selected answer: ${user_answer}`);
-    // // Save user answer
-    // answers.push(
-    //     {
-    //         "q_id": questions[current_index].q_id,
-    //         "a_id": user_answer
-    //     }
-    // );
+    
     validateAnswer(questions[current_index], user_answer);
     // Check if  it is the  last question
     if (current_index < questions.length - 1) {
