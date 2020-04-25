@@ -42,11 +42,17 @@ function renderQuestion(index) {
     document.getElementById("btn-next").style.display= "block";
     document.getElementById("success-box").style.display= "none";
     document.getElementById("failure-box").style.display= "none";
+
     let question = questions[index];
-    let bg_image = `background-image: url(${question.img})`;
-    document.getElementById("question-container").setAttribute("style", bg_image);
-    document.getElementById("question-container").style.height = "300px";
-    document.getElementById("question-container").style.width = "500px";
+    let bg_image = question.img;
+    // document.getElementById("question-container").setAttribute("style", bg_image);
+    // document.getElementById("question-container").style.height = "300px";
+    // document.getElementById("question-container").style.width = "500px";
+    let image = document.getElementById("question-img");
+    image.setAttribute("src",bg_image);
+    image.setAttribute("width", 200);
+    image.setAttribute("height", 200);
+    image.setAttribute("class", "responsive-img");
     
     document.getElementById("qtitle").innerHTML = question.title;
     document.getElementById("qtype").innerHTML = question.question_type;
@@ -124,7 +130,7 @@ function renderResults(container_id, result, user_percent) {
     let domString = `   
         <div id="result-title">${result.title}</div>
         <div id="result-message">${result.message} </div>
-        <div id="result-image" style="background-image: url(${result.img});height: 300px;width: 300px;"> </div>
+        <img src="${result.img}" class="responsive-img" />
         <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
     `;
     let html = parser.parseFromString(domString, 'text/html');

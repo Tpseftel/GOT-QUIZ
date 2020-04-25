@@ -3,10 +3,10 @@
 .container {
     display: block;
     position: relative;
-    padding-left: 35px;
+    /* padding-left: 10px; */
     margin-bottom: 12px;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 18px;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -100,3 +100,40 @@
     background-color: red !important;
     color: #2196F3!important;
   }
+  .w3-container{
+    -webkit-box-shadow: 10px 10px 84px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 84px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 84px 0px rgba(0,0,0,0.75);
+  }
+  .w3-container{
+    border: 1px solid blue;
+    text-align: center;
+  }
+
+  #main-container{
+    display: inline-block;  
+    position: relative;
+    align-items: center;
+  }
+  .responsive-img {
+    width: 40%;
+    height: auto;
+  }
+
+  #bg-image{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    filter: blur(5px);
+  }
+  #answer-container{
+   width: 100%;
+  }
+  #answer-placeholder{
+      width: 50%; /*can be in percentage also.*/
+      height: auto;
+      margin: 0 auto;
+      padding: 10px;
+      position: relative;
+  }
+  

@@ -31,7 +31,7 @@ async function initializeUI() {
         renderMainUI(quiz.title, quiz.description, current_index);
         renderQuestion(current_index);
         displayQuestions(true);
-        document.getElementById("main-container").style.display = "block";
+        document.getElementById("id01").style.display = "block";
     } catch (error) {
         console.log(`Error:${error.message}`);
     }

@@ -3,43 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./css/styles.css">
     <title>Document</title>
 </head>
-<body>
-<div id="main-container" style="display: none;">    
-<h1>Game Of Thrones</h1>
-<h3>Title</h3>
-<div id="main-title" style="color: blue;"></div>
-<h3>Decription</h3>
-<div id="main-desc" style="color: blue;"></div>
-    <h2 style="color: cadetblue;">Winter is here, wear yout jacket....</h2>
+<body >
+    <img id="bg-image" src="./bg-image.png">
+<div class="w3-container"  >
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content"  >
+            <div class="w3-container">
+                <div id="main-container" style="display: block;">    
+                    <h4>Title</h4>
+                    <div id="main-title" style="color: blue;"></div>
+                    <h4>Decription</h4>
+                    <div id="main-desc" style="color: blue;"></div>
+                </br>
+              <hr>
+                    <div id="questions-placeholder" style="display: block;">
+                        <h4>Questions</h4>
+                        <div id=question-container>
+                            <div id="qtitle"></div>
+                            <div id="qtype"></div>
+                            <br>
+                            <img id="question-img">
+                        </div>
+                    
+                        <h3> Possible Answers</h2>
+                        <div id="answer-container">
+                            <div id="answer-placeholder">
+                                <div id=qanswers></div>
+                                <button type="button" id="btn-next" onclick="nextQuestion()">Next</button>
+                                <div class="alert success" id="success-box" style="display: none;">
+                                    <strong>Great Try !!!!</strong> Keep going!
+                                </div>
+                                <div class="alert danger" id="failure-box" style="display: none;">
+                                    <strong>You should be watch the serie Again</strong> 
+                                </div>
+                            </div>
+                        </div>   
+                    </div>
+                    <div id="results-placeholder" style="display: none;">
+                        <div id="result-infos"></div>
+                        <button type="button" id="btn-restart" onclick="restartQuiz()">Play Again</button>
+                    </div>
+                    </div>
+                    
 
-<div id="questions-placeholder" style="display: block;">
-    <h1>Questions</h1>
-    <div id=question-container>
-        <div id="qtitle"></div>
-        <div id="qtype"></div>
-    </div>
-
-    <h2> Possible Answers</h2>
-
-    <div id=qanswers></div>
-    <button type="button" id="btn-next" onclick="nextQuestion()">Next</button>
-    <div class="alert success" id="success-box" style="display: none;">
-        <!-- <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>  -->
-        <strong>Great Try !!!!</strong> Keep going!
-    </div>
-    <div class="alert danger" id="failure-box" style="display: none;">
-        <!-- <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>  -->
-        <strong>You should be watch the serie Again</strong> 
+            </div>
+        </div>
     </div>
 </div>
-<div id="results-placeholder" style="display: none;">
-    <div id="result-infos"></div>
-    <button type="button" id="btn-restart" onclick="restartQuiz()">Play Again</button>
-</div>
-</div>
+
+
 
     <script src="./src/ui.js"></script>
     <script src="./src/main.js"></script>
