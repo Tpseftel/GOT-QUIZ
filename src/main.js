@@ -52,6 +52,7 @@ async function getData() {
      return data_p;
     } catch (error) {
         console.log(error.message);
+        alert("Please try again there is an error one the server");
     }
 }
 
