@@ -35,7 +35,6 @@ function renderMainUI(quiz_title, quiz_desc, current_index) {
     renderQuestion(current_index);
 }
 /**
- * 
  * @param {Number} index 
  */
 function renderQuestion(index) {
@@ -43,11 +42,11 @@ function renderQuestion(index) {
     document.getElementById("success-box").style.display= "none";
     document.getElementById("failure-box").style.display= "none";
 
+    document.getElementById("current-question").innerHTML = index + 1;
+    document.getElementById("total-questions").innerHTML = questions.length;
+    //FIXME: Make questions parameter and not use the global!!! 
     let question = questions[index];
     let bg_image = question.img;
-    // document.getElementById("question-container").setAttribute("style", bg_image);
-    // document.getElementById("question-container").style.height = "300px";
-    // document.getElementById("question-container").style.width = "500px";
     let image = document.getElementById("question-img");
     image.setAttribute("src",bg_image);
     image.setAttribute("width", 200);
@@ -55,7 +54,15 @@ function renderQuestion(index) {
     image.setAttribute("class", "responsive-img");
     
     document.getElementById("qtitle").innerHTML = question.title;
-    document.getElementById("qtype").innerHTML = question.question_type;
+    let type_message = "";
+    if(question.question_type == "mutiplechoice-single") {
+        type_message = "There is only one correct answer...";
+    }else if(question.question_type == "mutiplechoice-multiple") {
+        type_message =  "There may be more than one correct answers";
+    }else {
+        type_message = "";
+    }
+    document.getElementById("qtype").innerHTML = type_message;
     
     // Render possible answers
     const question_container = "qanswers";
@@ -152,7 +159,6 @@ function displayQuestions(confirm) {
     }
 }
 
-
 function displaySuccessMessage() {
     document.getElementById("btn-next").style.display= "none";
     document.getElementById("success-box").style.display= "block";    
@@ -160,10 +166,4 @@ function displaySuccessMessage() {
 function displayFailureMessage() {
     document.getElementById("btn-next").style.display= "none";
     document.getElementById("failure-box").style.display= "block";    
-}
-
-
-function displayWarining(){
-    document.getElementById("btn-next").style.display= "none";
-    document.getElementById("warning-box").style.display= "block";    
 }
