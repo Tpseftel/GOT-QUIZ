@@ -69,15 +69,15 @@ function beforeNextQuestion() {
     if(isCorrect) {
         user_points.points += current_question.points;
         user_points.right_qsts.push(current_question.q_id);
-        delay = 3000;
         console.log(`User Points:${user_points.points}`);
         displaySuccessMessage();
+        delay = 3000;
     }else {
         user_points.wrong_qsts.push(current_question.q_id);
         console.log(`User Points:${user_points.points}`);
         highlightCorrect(current_question.correct_answer);
-        delay = 500;
         displayFailureMessage();
+        delay = 1000;
     }
     goNext(delay);
 }

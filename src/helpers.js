@@ -39,7 +39,7 @@ function getAjax(url) {
  */
 async function displayResults(questions, user_points) {
     displayQuestions(false);
-    const user_percent = calculateUserResult(questions, user_points);
+    const user_percent = calculatePercentPoints(questions, user_points);
     console.log(`Result Percent ${user_percent}`);
     let result_message = getResultMessage(user_percent);
     renderResults("result-infos", result_message, user_percent);
@@ -142,7 +142,7 @@ function getUserAnswer(question) {
  * @param {Number} user_points 
  * @return {Number}  
  */
-function calculateUserResult(questions, user_points) {
+function calculatePercentPoints(questions, user_points) {
     console.log(`Calcualte result user points${user_points}`);
     if(user_points == 0) return 0;
     let all_points = 0 ;
