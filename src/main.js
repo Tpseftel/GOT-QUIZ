@@ -9,10 +9,10 @@ let quiz = {};
 let result_messages = {};
 let current_index;
 let questions = [];
-let user_result ; 
+let user_points ; 
 
 async function initializeUI() {
-    user_result = {
+    user_points = {
         "wrong_qsts": [],
         "right_qsts": [],
         "points": 0
@@ -70,30 +70,40 @@ function nextQuestion() {
     console.log(`current question index:${current_index}`);
     // Get user selected answer
     let user_answer = getAnswer(questions[current_index]);
+    // Check if user have selected any answer
+    if(typeof user_answer == "object"){
+        if(user_answer.length < 1) {
+            alert("Select Answers....");
+            return;
+        }
+    }
     if(!user_answer) {
         alert("Select an Answer....");
         return;
     }
 
-    console.log(`Selected answer: ${user_answer}`);
-    
     validateAnswer(questions[current_index], user_answer);
-    // Check if  it is the  last question
     if (current_index < questions.length - 1) {
+        // This is not the last question
         current_index++;
-        renderQuestion(current_index); 
+        setTimeout(function(){ renderQuestion(current_index); }, 3000);
     }else {
-        displayResults();
+        //Last Question
+        setTimeout(function(){displayResults(questions, user_points.points);}, 3000);
    }
 }
-
-async function displayResults() {
+/**
+ * 
+ * @param {Object} questions 
+ * @param {Number} user_points 
+ */
+async function displayResults(questions, user_points) {
     displayQuestions(false);
-    const user_percent = calculateUserResult(questions, user_result.points);
+    const user_percent = calculateUserResult(questions, user_points.points);
     console.log(`Result Percent ${user_percent}`);
     let result_message = getResultMessage(user_percent);
     renderResults("result-infos", result_message, user_percent);
-    console.log(user_result);
+    console.log(user_points);
 }
 
 /** 
@@ -116,37 +126,41 @@ function getResultMessage(user_result, quiz_id=12) {
  * @param {*} answer_id  The id of the user's answer
  */
 function validateAnswer(question, answer_id){
+    let isCorrect = false;
         if (question.question_type == "mutiplechoice-single") {
             if (answer_id == question.correct_answer) {
                 // Correct  Answer
-                user_result.points += question.points;
-                user_result.right_qsts.push(question.q_id);
+                user_points.points += question.points;
+                user_points.right_qsts.push(question.q_id);
+                isCorrect = true;
             } else {
                 // Wrong Answer
-                user_result.wrong_qsts.push(question.q_id);
-                highlightCorrect(question.correct_answer);
+                user_points.wrong_qsts.push(question.q_id);
             }
+            highlightCorrect(question.correct_answer, isCorrect);
         }
         else if(question.question_type == "mutiplechoice-multiple") {
             if(areArraysEqualSets(answer_id, question.correct_answer)) {
                 // Correct  Answer
-                user_result.points += question.points;
-                user_result.right_qsts.push(question.q_id);
+                user_points.points += question.points;
+                user_points.right_qsts.push(question.q_id);
+                isCorrect = true;
             } else {
                 // Wrong Answer
-                user_result.wrong_qsts.push(question.q_id);
-                highlightCorrect(question.correct_answer);
+                user_points.wrong_qsts.push(question.q_id);
             }
-        }else { 
+            highlightCorrect(question.correct_answer, isCorrect);
+        }else { //truefalse case
             if (answer_id.localeCompare(question.correct_answer) == 0) {
-                user_result.points += question.points;
-                user_result.right_qsts.push(question.q_id);
+                user_points.points += question.points;
+                user_points.right_qsts.push(question.q_id);
+                isCorrect = true;
             }else {
-                user_result.wrong_qsts.push(question.q_id);
-                highlightCorrect(question.correct_answer);
+                user_points.wrong_qsts.push(question.q_id);
             }                
+            highlightCorrect(question.correct_answer, isCorrect);
         } 
-    return user_result;
+    return user_points;
 
     function areArraysEqualSets(a1, a2) {
         a1 =  a1.map(String);

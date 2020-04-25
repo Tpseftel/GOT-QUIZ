@@ -1,30 +1,24 @@
 
 const parser = new DOMParser();
 
-function highlightCorrect(answers_c) {
-    // let cor_elements = [];
-    // let el;
-    // if(Array.isArray(answers_c)){
-    //     answers_c.forEach(ans => {
-    //       el =   document.getElementById(c);
-    //       myFunction(el,"correct-answers");
-    //     });
-    // }else {
-    //     el = document.getElementById(answers_c);
-    //     myFunction(el,"correct-answers");
-    // }
-    // function sleep(ms) {
-    //     return new Promise(resolve => setTimeout(resolve, ms));
-    // }
-    // (async()=>{
-    //     //Do some stuff
-    //     await sleep(3000);
-    //     alert("hello");
-    //   })();
-      
+function highlightCorrect(answers_c, isCorrect) {
+    let cor_elements = [];
+    let el;
+    if(Array.isArray(answers_c)){
+        answers_c.forEach(ans => {
+          el =   document.getElementById(ans);
+          console.log(isCorrect);
+          if(isCorrect)  addClass(el,"correct-answers");
+          else addClass(el,"wrong-answers");
+        });
+    }else {
+        console.log(isCorrect);
+        el = document.getElementById(answers_c);
+        if(isCorrect) addClass(el,"correct-answers");
+        else addClass(el,"wrong-answers");
+    }
 
-    // alert(`wrong answer bitch \n the correct is:${questions[current_quest].correct_answer}`);
-    function myFunction(element, class_name) {
+    function addClass(element, class_name) {
         let arr;
         arr = element.className.split(" ");
         if (arr.indexOf(class_name) == -1) {
@@ -77,14 +71,14 @@ function renderTruefalse(container_id) {
     container.innerHTML = "";
 
     let trueDomString =`
-        <label class="container"> TRUE
+        <label class="container" id="true"> TRUE
             <input type="radio" value="true" name="truefalse" >
             <span class="checkmark"></span>
         </label>
         </br>
     `;
     let falseDomString =`
-        <label class="container"> FALSE
+        <label class="container" id="false"> FALSE
             <input type="radio" value="false" name="truefalse" >
             <span class="checkmark"></span>
         </label>
