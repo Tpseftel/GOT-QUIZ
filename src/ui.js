@@ -1,21 +1,17 @@
 
 const parser = new DOMParser();
 
-function highlightCorrect(answers_c, isCorrect) {
+function highlightCorrect(answers_c) {
     let cor_elements = [];
     let el;
     if(Array.isArray(answers_c)){
         answers_c.forEach(ans => {
           el =   document.getElementById(ans);
-          console.log(isCorrect);
-          if(isCorrect)  addClass(el,"correct-answers");
-          else addClass(el,"wrong-answers");
+          addClass(el,"correct-answers");
         });
     }else {
-        console.log(isCorrect);
         el = document.getElementById(answers_c);
-        if(isCorrect) addClass(el,"correct-answers");
-        else addClass(el,"wrong-answers");
+         addClass(el,"correct-answers");
     }
 
     function addClass(element, class_name) {
@@ -25,7 +21,6 @@ function highlightCorrect(answers_c, isCorrect) {
           element.className += " " + class_name;
         }
       }
-      
 }
 
 /**
@@ -44,6 +39,9 @@ function renderMainUI(quiz_title, quiz_desc, current_index) {
  * @param {Number} index 
  */
 function renderQuestion(index) {
+    document.getElementById("btn-next").style.display= "block";
+    document.getElementById("success-box").style.display= "none";
+    document.getElementById("failure-box").style.display= "none";
     let question = questions[index];
     let bg_image = `background-image: url(${question.img})`;
     document.getElementById("question-container").setAttribute("style", bg_image);
@@ -148,3 +146,18 @@ function displayQuestions(confirm) {
     }
 }
 
+
+function displaySuccessMessage() {
+    document.getElementById("btn-next").style.display= "none";
+    document.getElementById("success-box").style.display= "block";    
+}
+function displayFailureMessage() {
+    document.getElementById("btn-next").style.display= "none";
+    document.getElementById("failure-box").style.display= "block";    
+}
+
+
+function displayWarining(){
+    document.getElementById("btn-next").style.display= "none";
+    document.getElementById("warning-box").style.display= "block";    
+}
