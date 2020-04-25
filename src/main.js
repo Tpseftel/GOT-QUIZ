@@ -27,6 +27,15 @@ async function initializeUI() {
         }
         quiz = quiz_data[0];
         result_messages = quiz_data[1];
+
+        console.log(`quiz_data: ${quiz_data}`);
+        console.log(`quiz_data[0]: ${quiz_data[0]}`);
+        console.log("===================================================");
+        console.log(`quiz_data[1]: ${quiz_data[1]}`);
+        console.log("===================================================");
+        console.log(`quiz_data[0].q_id}: ${quiz_data[0].q_id}`);
+        console.log(`quiz_data[1].q_id: ${quiz_data[1].q_id}`);
+
         questions = quiz.questions;
         renderMainUI(quiz.title, quiz.description, current_index);
         renderQuestion(current_index);
@@ -59,7 +68,7 @@ async function getData() {
 function getDataAjax(url) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", url);
+        xhr.open("GET", url, true);
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
                 resolve(xhr.response);
