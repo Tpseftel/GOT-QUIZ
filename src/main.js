@@ -1,83 +1,76 @@
-// http://proto.io/en/jobs/candidate-questions/quiz.json
-// http://proto.io/en/jobs/candidate-questions/result.json
 // TODO: Use Local Storage for current question, score  and more
 const url_quiz = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
 const url_results = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
 
-let quiz = {};
-let result_messages = {};
+let quiz;
+let result_messages;
 let current_index;
 let questions = [];
-let user_points ; 
+let user_points; 
 
 /**
  * Initialize the main quiz interface
  */
 async function initializeUI() {
-    let quiz_data;
+    current_index = 0;
     user_points = {
         "wrong_qsts": [],
         "right_qsts": [],
         "points": 0
     };
-    current_index = 0;
-    try {
-        if (!quiz_data){
-            quiz_data = await getData();
+    try { // Prevent the api call when play again
+        if (!quiz){
+            quiz = await retrieveData(url_quiz);
         }
-        quiz = quiz_data[0];
-        result_messages = quiz_data[1];
-
-        console.log(`quiz_data: ${quiz_data}`);
-        console.log(`quiz_data[0]: ${quiz_data[0]}`);
-        console.log("===================================================");
-        console.log(`quiz_data[1]: ${quiz_data[1]}`);
-        console.log("===================================================");
-        console.log(`quiz_data[0].q_id}: ${quiz_data[0].q_id}`);
-        console.log(`quiz_data[1].q_id: ${quiz_data[1].q_id}`);
-
-        questions = quiz.questions;
-        renderMainUI(quiz.title, quiz.description, current_index);
-        renderQuestion(current_index);
-        displayQuestions(true);
-        document.getElementById("id01").style.display = "block";
+        if(!result_messages) {
+        let  result = await retrieveData(url_results);
+        console.log(result.quiz_id);
+        console.log(quiz.quiz_id);
+            if(result.quiz_id == quiz.quiz_id) {
+                result_messages = result;
+            }
+        }
     } catch (error) {
         console.log(`Error:${error.message}`);
+        alert("There is problem, Pleaze try again");
     }
+    questions = quiz.questions;
+    renderMainUI(quiz.title, quiz.description, current_index);
+    renderQuestion(current_index);
+    displayQuestions(true);
+    document.getElementById("id01").style.display = "block";
 }
+
 /**
  * Retrieves Data from Remote API
  * @returns {object}
  */
-async function getData() {
-    let data_p = [];
-    const quiz_promise = getDataAjax(url_quiz);
-    const quiz_results = getDataAjax(url_results);
+async function retrieveData(url) {
     try {
-     let raw_data = await Promise.all([quiz_promise, quiz_results]);
-     raw_data.forEach(data => {
-         data_p.push(JSON.parse(data));
-     });
-     return data_p;
+        let data = await getAjax(url);
+        return JSON.parse(data);
     } catch (error) {
-        console.log(error.message);
-        alert("Please try again there is an error one the server");
+        console.log(`Error:${error.message}`);
     }
 }
 
-function getDataAjax(url) {
+/**
+ * 
+ * @param {String} url endpoint url 
+ */
+function getAjax(url) {
     return new Promise((resolve, reject) => {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", url, true);
-        xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                resolve(xhr.response);
+        let req = new XMLHttpRequest();
+        req.open("GET", url, true);
+        req.onload = () => {
+            if (req.status == 200) {
+                resolve(req.response);
             } else {
-                reject(xhr.statusText);
+                reject(Error(req.statusText));
             }
         };
-        xhr.onerror = () => reject(xhr.statusText);
-        xhr.send();
+        req.onerror = () => reject(Error("Network Error"));
+        req.send();
     });
 }
 
@@ -88,7 +81,7 @@ function nextQuestion() {
     let current_question = questions[current_index];
     console.log(`Current question index:${current_index}`);
     // Get user selected answer
-    let user_answer = getAnswer(questions[current_index]);
+    let user_answer = getAnswer(current_question);
     // Check if user have selected any answer
     if(typeof user_answer == "object"){
         if(user_answer.length < 1) {
@@ -101,18 +94,18 @@ function nextQuestion() {
         return;
     }
     let delay;
-    const isCorrect = validateAnswer(questions[current_index], user_answer);
+    const isCorrect = validateAnswer(current_question, user_answer);
     console.log(`Is Correct:${isCorrect}`);
     if(isCorrect) {
-        user_points.points += questions[current_index].points;
-        user_points.right_qsts.push(questions[current_index].q_id);
+        user_points.points += current_question.points;
+        user_points.right_qsts.push(current_question.q_id);
         delay = 3000;
         console.log(`User Points:${user_points.points}`);
         displaySuccessMessage();
     }else {
-        user_points.wrong_qsts.push(questions[current_index].q_id);
+        user_points.wrong_qsts.push(current_question.q_id);
         console.log(`User Points:${user_points.points}`);
-        highlightCorrect(questions[current_index].correct_answer);
+        highlightCorrect(current_question.correct_answer);
         delay = 1500;
         displayFailureMessage();
     }
