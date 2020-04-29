@@ -9,31 +9,45 @@
 </head>
 <body>
 <div class="main-container col-12">
-        <div id="title-placeholder" class="col-8"> Game of Thrones Game</div>
-        <div id="description-placeholder" class="col-8"> Winter is here..wear your jacket</div>
+        <div id="quiz-title" class="col-8"> Game of Thrones Game</div>
+        <div id="quiz-description" class="col-8"> Winter is here..wear your jacket</div>
 
+        <!-- Question Container -->
         <div id="question-container" class="col-7">
-            Question Container
+            <h5>Question (<span id="current-question">1 </span>/<span id="total-questions">2</span>)</h4>
+
             <div id="question-title" class="col-12">
                 I am question title
             </div>
             <div id="question-tip" class="col-12">
                 I am question tip
             </div>
-            <div id="answers-placeholder" class="col-8">
-                <ul>
-                    <li>hello</li>
-                    <li>hekki</li>
-                    <li>keufh</li>
-                    <li>ehfie</li>
-                </ul>
+                <img id="question-img">
+            <!-- Possible Answers -->
+            <div id="answer-container" class="col-8">
+                <div id=answer-placeholder>
+                    Answer 1
+                </div>
+                <button type="button" id="btn-next" onclick="beforeNextQuestion()">Next</button>
+                <!-- Alert Messages to User -->
+                <div class="alert success" id="success-box">
+                    <strong>Great Try !!!!</strong> Keep going!
+                </div>
+                <div class="alert danger" id="failure-box" >
+                    <strong>You should be watch the serie Again</strong> 
+                </div>
+                <!-- Alert Messages to User -->
             </div>
-        </div><!-- Question Container  End -->
+            <!-- Possible Answers End -->
+        </div>
+        <!-- Question Container  End -->
 
+        <!-- Resutl Container -->
         <div id="results-container" class="col-7">
             <h3>Results</h3>
             <div id="row">
                 <div id="result-data" class="col-6">
+                    <div id="result-infos" class="col-6"></div>
                     Corect: <span id="corrent-answers"></span>  
                     <br>
                     Wrong: <span id="wrong-answers"></span> 
@@ -42,11 +56,13 @@
             </div>
             <div id="result-message" class="col-12">Message</div>
             <div id="result-image" class="col-12">Image</div>
+            <button type="button" id="btn-restart" onclick="restartQuiz()">Play Again</button>
         </div>
+        <!-- Resutl Container End -->
 </div>     
 
-    <!-- <script src="./src/helpers.js"></script> -->
-    <!-- <script src="./src/ui.js"></script> -->
-    <!-- <script src="./src/main.js"></script> -->
+    <script src="./src/helpers.js"></script>
+    <script src="./src/ui.js"></script>
+    <script src="./src/main.js"></script>
 </body>
 </html>

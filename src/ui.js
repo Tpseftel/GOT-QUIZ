@@ -30,8 +30,8 @@ function highlightCorrect(answers_c) {
  * @param {Number} current_index 
  */
 function renderMainUI(quiz_title, quiz_desc, current_index) {
-    document.getElementById("main-title").innerHTML = quiz_title;
-    document.getElementById("main-desc").innerHTML = quiz_desc;
+    document.getElementById("quiz-title").innerHTML = quiz_title;
+    document.getElementById("quiz-description").innerHTML = quiz_desc;
     renderQuestion(current_index);
 }
 /**
@@ -53,7 +53,7 @@ function renderQuestion(index) {
     image.setAttribute("height", 200);
     image.setAttribute("class", "responsive-img");
     
-    document.getElementById("qtitle").innerHTML = question.title;
+    document.getElementById("question-title").innerHTML = question.title;
     let type_message = "";
     if(question.question_type == "mutiplechoice-single") {
         type_message = "There is only one correct answer...";
@@ -62,10 +62,10 @@ function renderQuestion(index) {
     }else {
         type_message = "";
     }
-    document.getElementById("qtype").innerHTML = type_message;
+    document.getElementById("question-tip").innerHTML = type_message;
     
     // Render possible answers
-    const question_container = "qanswers";
+    const question_container = "answer-placeholder";
     if (question.question_type == "mutiplechoice-single" || question.question_type == "mutiplechoice-multiple") {
         renderMultipleChoice(question_container, question);
     } else {
@@ -150,12 +150,12 @@ function renderResults(container_id, result, user_percent) {
  */
 function displayQuestions(confirm) {
     if(confirm) {
-        document.getElementById("results-placeholder").style.display= "none";
-        document.getElementById("questions-placeholder").style.display= "block";
+        document.getElementById("results-container").style.display= "none";
+        document.getElementById("question-container").style.display= "block";
     }else {
          // Display results content
-        document.getElementById("questions-placeholder").style.display= "none";
-        document.getElementById("results-placeholder").style.display= "block";
+         document.getElementById("question-container").style.display= "none";
+         document.getElementById("results-container").style.display= "block";
     }
 }
 

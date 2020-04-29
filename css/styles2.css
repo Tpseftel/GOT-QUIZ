@@ -76,10 +76,10 @@
 .main-container{
     border:2px solid  red;
 }
-#title-placeholder{
+#quiz-title{
     border:1px solid green;
 }
-#description-placeholder{
+#quiz-description{
     border:1px solid rosybrown;
 }
 #question-container{
