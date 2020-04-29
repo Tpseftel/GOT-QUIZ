@@ -13,7 +13,6 @@ async function retrieveData(url) {
 }
 
 /**
- * 
  * @param {String} url endpoint url 
  */
 function getAjax(url) {
@@ -137,7 +136,6 @@ function getUserAnswer(question) {
 }
 
 /**
- * 
  * @param {Object} questions 
  * @param {Number} user_points 
  * @return {Number}  

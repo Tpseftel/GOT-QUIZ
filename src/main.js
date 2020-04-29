@@ -10,7 +10,7 @@ let user_points;
 
 /**
  * Initialize the main quiz interface
- */
+*/
 async function initializeUI() {
     current_index = 0;
     user_points = {
@@ -19,7 +19,7 @@ async function initializeUI() {
         "points": 0
     };
     try { 
-        // Prevent the api call when play again
+        // Prevent reload data on play again
         if (!quiz){
             quiz = await retrieveData(url_quiz);
         }
@@ -50,9 +50,11 @@ async function initializeUI() {
 function beforeNextQuestion() {
     let current_question = questions[current_index];
     console.log(`Current question index:${current_index}`);
+
+    // FIXME: Reverse: First check if user have answer and then get the question
     // Get user's selected answer
     let user_answer = getUserAnswer(current_question);
-    // Check if user have selected any answer
+    // Check if the user have selected any answer
     if(typeof user_answer == "object"){
         if(user_answer.length < 1) {
             alert("Select Answers....");
@@ -90,7 +92,7 @@ function goNext(delay) {
         delayFun(() =>{renderQuestion(current_index);});
     }
     else {
-        //Last Question
+        // Last Question
         delayFun(() => {
             return displayResults(questions, user_points.points);
         });

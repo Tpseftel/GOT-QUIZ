@@ -20,7 +20,7 @@ function highlightCorrect(answers_c) {
         if (arr.indexOf(class_name) == -1) {
           element.className += " " + class_name;
         }
-      }
+    }
 }
 
 /**
