@@ -33,7 +33,7 @@ function getAjax(url) {
 
 /**
  * 
- * @param {Object} questions 
+ * @param {Array} questions 
  * @param {Number} user_points 
  */
 async function displayResults(questions, user_points) {
@@ -64,8 +64,9 @@ function getResultMessage(user_result) {
     console.log(`message_p:${message_p}`);
     return message_p;
 }
+
 /**
- * 
+ * Validates if the answer is correct
  * @param {Object} question Question object
  * @param {Array} answer_id  The id of the user's answer
  * @returns {Boolean}
@@ -105,6 +106,7 @@ function validateAnswer(question, answer_id){
 }
 
 /**
+ * Retrieves User Answer
  * @param {Object} question 
  * returns {String}
  */
