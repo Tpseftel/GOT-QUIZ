@@ -37,55 +37,35 @@ async function initializeUI() {
     }
     questions = quiz.questions;
     renderMainUI(quiz.title, quiz.description, current_index);
-    renderQuestion(current_index);
     displayQuestions(true);
-
-    // Display Main modal
-    document.getElementById("id01").style.display = "block";
 }
 
 /**
- * Handles next button
+ * Just before go next
  */
 function beforeNextQuestion() {
     let current_question = questions[current_index];
     console.log(`Current question index:${current_index}`);
-
-    // FIXME: Reverse: First check if user have answer and then get the question
-    // Get user's selected answer
     let user_answer = getUserAnswer(current_question);
+
     // Check if the user have selected any answer
-    if(typeof user_answer == "object"){
-        if(user_answer.length < 1) {
-            alert("Select Answers....");
-            return;
-        }
-    }
-    if(!user_answer) {
-        alert("Select an Answer....");
+    if (user_answer.length == 0) {
+        alert ( "Pleaze select an answer");
         return;
     }
-    let delay;
     const isCorrect = validateAnswer(current_question, user_answer);
     console.log(`Is Correct:${isCorrect}`);
-    if(isCorrect) {
-        user_points.points += current_question.points;
-        user_points.right_qsts.push(current_question.q_id);
-        console.log(`User Points:${user_points.points}`);
-        displaySuccessMessage();
-        delay = 3000;
-    }else {
-        user_points.wrong_qsts.push(current_question.q_id);
-        console.log(`User Points:${user_points.points}`);
-        highlightCorrect(current_question.correct_answer);
-        displayFailureMessage();
-        delay = 1000;
-    }
-    goNext(delay);
+    computeQuestionPoints(isCorrect, current_question);
+    
+    if(isCorrect) goNextQuestion(3000);
+    else goNextQuestion(1500);
 }
 
-
-function goNext(delay) {
+/**
+ * 
+ * @param {Number} delay The delay before go to next question 
+ */
+function goNextQuestion(delay) {
     if (current_index < questions.length - 1) {
         // This is not the last question
         current_index++;

@@ -67,7 +67,7 @@ function getResultMessage(user_result) {
 /**
  * 
  * @param {Object} question Question object
- * @param {String} answer_id  The id of the user's answer
+ * @param {Array} answer_id  The id of the user's answer
  * @returns {Boolean}
  */
 function validateAnswer(question, answer_id){
@@ -135,3 +135,18 @@ function calculatePercentPoints(questions, user_points) {
 
     return percent_points;
  }
+
+ function computeQuestionPoints(isCorrect, current_question) {
+    if (isCorrect) {
+        user_points.points += current_question.points;
+        user_points.right_qsts.push(current_question.q_id);
+        console.log(`User Points:${user_points.points}`);
+        displaySuccessMessage();
+    }
+    else {
+        user_points.wrong_qsts.push(current_question.q_id);
+        console.log(`User Points:${user_points.points}`);
+        highlightCorrect(current_question.correct_answer);
+        displayFailureMessage();
+    }
+}
