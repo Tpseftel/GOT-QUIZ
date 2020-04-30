@@ -71,15 +71,13 @@ function getResultMessage(user_result) {
  * @returns {Boolean}
  */
 function validateAnswer(question, answer_id){
+    const type = question.question_type;
     let isCorrect = false;
-        if (question.question_type == "mutiplechoice-single") {
-            if (answer_id == question.correct_answer) isCorrect = true;
-        }
-        else if(question.question_type == "mutiplechoice-multiple") {
+        if (type == "mutiplechoice-single" || type == "truefalse") {
+            if (answer_id[0].localeCompare(question.correct_answer) == 0) isCorrect = true;
+        }else {
             if(areArraysEqualSets(answer_id, question.correct_answer)) isCorrect = true;
-        }else { //Case truefalse 
-            if (answer_id.localeCompare(question.correct_answer) == 0) isCorrect = true;
-        } 
+        }
     return isCorrect;
 
     function areArraysEqualSets(a1, a2) {
@@ -111,28 +109,14 @@ function validateAnswer(question, answer_id){
  * returns {String}
  */
 function getUserAnswer(question) {
-    let type =  question.question_type;
-    if(type === "mutiplechoice-single") {
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
-            return ele[i].getAttribute("value");
-        } 
-    }else if(type === "mutiplechoice-multiple") {
-        let selected = [];
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
+    let selected = [];
+    const ele = document.getElementsByName(question.question_type); 
+    for(i = 0; i < ele.length; i++) { 
+        if(ele[i].checked){
             selected.push(ele[i].getAttribute("value"));
-        }
-        return selected; 
-    }else { 
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
-            return ele[i].getAttribute("value");
         } 
-    }
+    } 
+    return selected;
 }
 
 /**
