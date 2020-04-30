@@ -101,11 +101,11 @@ function renderTruefalse(container_id) {
             <span class="checkmark"></span>
         </label>
     `;
-    let htmlFalse = parser.parseFromString(falseDomString, 'text/html'); 
-    let htmlTrue = parser.parseFromString(trueDomString, 'text/html'); 
+    let htmlFalse = parser.parseFromString(falseDomString, 'text/html').body.children[0]; 
+    let htmlTrue = parser.parseFromString(trueDomString, 'text/html').body.children[0]; 
 
-    container.appendChild(htmlTrue.documentElement);
-    container.appendChild(htmlFalse.documentElement);
+    container.appendChild(htmlTrue);
+    container.appendChild(htmlFalse);
 }
 
 /**
@@ -128,8 +128,8 @@ function renderMultipleChoice(container_id, question) {
             </label>
             </br>
         `;
-        let html = parser.parseFromString(domString, 'text/html'); 
-        container.appendChild(html.documentElement);
+        let html = parser.parseFromString(domString, 'text/html').body.children[0]; 
+        container.appendChild(html);
     });
 }
 
