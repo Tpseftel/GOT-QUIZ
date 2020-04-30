@@ -4,7 +4,7 @@ const url_results = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
 
 let quiz;
 let result_messages;
-let current_index;
+let current_index ;
 let questions = [];
 let user_points; 
 
@@ -41,10 +41,11 @@ async function initializeUI() {
 }
 
 /**
- * Just before go next
+ * Submit the answer for the current question
  */
-function beforeNextQuestion() {
+function submitAnswer() {
     let current_question = questions[current_index];
+
     console.log(`Current question index:${current_index}`);
     let user_answer = getUserAnswer(current_question);
 
@@ -56,38 +57,31 @@ function beforeNextQuestion() {
     const isCorrect = validateAnswer(current_question, user_answer);
     console.log(`Is Correct:${isCorrect}`);
     computeQuestionPoints(isCorrect, current_question);
+    let delay;
+    if(isCorrect) delay = 3000;
+    else delay =1000;
     
-    if(isCorrect) goNextQuestion(3000);
-    else goNextQuestion(1500);
+    if(current_index < questions.length - 1) goNextQuestion(delay);
+    else goResults(delay);
 }
 
 /**
- * 
- * @param {Number} delay The delay before go to next question 
+ * @param {Number} delay The delay before go to the next question 
  */
 function goNextQuestion(delay) {
-    if (current_index < questions.length - 1) {
-        // This is not the last question
         current_index++;
-        delayFun(() =>{renderQuestion(current_index);});
-    }
-    else {
-        // Last Question
-        delayFun(() => {
-            return displayResults(questions, user_points.points);
-        });
-    }
-    async function delayFun(fun) { 
-        return new Promise(function(resolve, reject) { 
-            setTimeout(resolve, delay); 
-        }).then(function() { 
-            fun();
-        }); 
-    } 
+        delayFun(() =>{renderQuestion(current_index);}, delay);
 }
 
- function restartQuiz(){
-    initializeUI();
- }
+/**
+ * @param {Number} delay Delay before go to the result
+ */
+function goResults( delay) {
+    delayFun(() => {displayResults(questions, user_points.points);}, delay);
+}
+
+function restartQuiz(){
+initializeUI();
+}
 
  window.onload = initializeUI;

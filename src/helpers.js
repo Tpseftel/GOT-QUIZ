@@ -150,3 +150,16 @@ function calculatePercentPoints(questions, user_points) {
         displayFailureMessage();
     }
 }
+
+/**
+ * Set timeout to run a function
+ * @param {Function} fun 
+ * @param {Number} delay 
+ */
+async function delayFun(fun, delay) { 
+    return new Promise(function(resolve, reject) { 
+        setTimeout(resolve, delay); 
+    }).then(function() { 
+        fun();
+    });
+}
