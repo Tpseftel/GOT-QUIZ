@@ -43,7 +43,6 @@ async function displayResults(questions, user_stats) {
     let result_message = getResultMessage(user_percent);
     renderResults(result_message, user_percent, user_stats);
     console.log(`User points: ${user_stats}`);
-    
 }
 
 /** 
@@ -72,12 +71,12 @@ function getResultMessage(user_result) {
  * @param {Array} answer_id  The id of the user's answer
  * @returns {Boolean}
  */
-function validateAnswer(question, answer_id){
+function validateAnswer(question, answer_id) {
     const type = question.question_type;
     let isCorrect = false;
         if (type == "mutiplechoice-single" || type == "truefalse") {
             if (answer_id[0].localeCompare(question.correct_answer) == 0) isCorrect = true;
-        }else {
+        } else {
             if(areArraysEqualSets(answer_id, question.correct_answer)) isCorrect = true;
         }
     return isCorrect;
@@ -143,15 +142,8 @@ function calculatePercentPoints(questions, user_stats) {
     if (isCorrect) {
         user_stats.points += current_question.points;
         user_stats.right_qsts.push(current_question.q_id);
-        // console.log(`User Points:${user_stats.points}`);
-        displaySuccessMessage();
     }
-    else {
-        user_stats.wrong_qsts.push(current_question.q_id);
-        // console.log(`User Points:${user_stats.points}`);
-        highlightCorrect(current_question.correct_answer);
-        displayFailureMessage();
-    }
+    else user_stats.wrong_qsts.push(current_question.q_id);
 }
 
 /**

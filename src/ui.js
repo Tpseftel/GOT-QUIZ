@@ -2,16 +2,15 @@
 const parser = new DOMParser();
 
 function highlightCorrect(answers_c) {
-    let cor_elements = [];
     let el;
     if(Array.isArray(answers_c)){
         answers_c.forEach(ans => {
-          el =   document.getElementById(ans);
+          el = document.getElementById(ans);
           addClass(el,"correct-answers");
         });
-    }else {
+    } else {
         el = document.getElementById(answers_c);
-         addClass(el,"correct-answers");
+         addClass(el, "correct-answers");
     }
 
     function addClass(element, class_name) {
@@ -140,25 +139,12 @@ function renderMultipleChoice(container_id, question) {
  * @param {Object} result 
  */
 function renderResults(result, user_percent, user_stats) {
-    console.log(user_stats);
     document.getElementById("result-title").innerHTML = result.title ;
-
     document.getElementById("wrong-answers").innerHTML =  user_stats.wrong_qsts.length;
     document.getElementById("correct-answers").innerHTML =  user_stats.right_qsts.length;
     document.getElementById("result-percent").innerHTML = user_percent + " %";
     document.getElementById("result-message").innerHTML = result.message;
     document.getElementById("result-image").src = result.img;
-
-    // let container = document.getElementById(container_id);
-    // container.innerHTML = '';
-    // let domString = `   
-    //     <div id="result-title">${result.title}</div>
-    //     <div id="result-message">${result.message} </div>
-    //     <img src="${result.img}" class="responsive-img" />
-    //     <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
-    // `;
-    // let html = parser.parseFromString(domString, 'text/html');
-    // container.appendChild(html.documentElement);
 }
 
 /**
