@@ -1,16 +1,18 @@
 
 const parser = new DOMParser();
 
-function highlightCorrect(answers_c) {
+function highlightCorrect(answers_c, isCorrect) {
     let el;
-    if(Array.isArray(answers_c)){
+    if(Array.isArray(answers_c)) {
         answers_c.forEach(ans => {
           el = document.getElementById(ans);
-          addClass(el,"correct-answers");
+          if (isCorrect) addClass(el, "correct-answer");
+          else addClass(el,"wrong-answer");
         });
     } else {
         el = document.getElementById(answers_c);
-         addClass(el, "correct-answers");
+        if (isCorrect) addClass(el, "correct-answer");
+        else addClass(el, "wrong-answer");
     }
 
     function addClass(element, class_name) {
@@ -46,8 +48,6 @@ function renderQuestion(index) {
         document.getElementById("btn-next").style.display= "block";
         document.getElementById("btn-result").style.display= "none";
     }
-    document.getElementById("success-box").style.display= "none";
-    document.getElementById("failure-box").style.display= "none";
 
     document.getElementById("current-question").innerHTML = index + 1;
     document.getElementById("total-questions").innerHTML = questions.length;
@@ -160,13 +160,4 @@ function displayQuestions(confirm) {
          document.getElementById("question-container").style.display= "none";
          document.getElementById("results-container").style.display= "block";
     }
-}
-
-function displaySuccessMessage() {
-    document.getElementById("btn-next").style.display= "none";
-    document.getElementById("success-box").style.display= "block";    
-}
-function displayFailureMessage() {
-    document.getElementById("btn-next").style.display= "none";
-    document.getElementById("failure-box").style.display= "block";    
 }

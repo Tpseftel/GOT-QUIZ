@@ -57,15 +57,12 @@ function submitAnswer() {
     const isCorrect = validateAnswer(current_question, user_answer);
     console.log(`Is Correct:${isCorrect}`);
     computeQuestionPoints(isCorrect, current_question);
-    let delay;
+    let delay = 3000;
     if(isCorrect) {
-        displaySuccessMessage();
-        delay = 3000;
+        highlightCorrect(current_question.correct_answer, isCorrect);
     }
     else { 
-        highlightCorrect(current_question.correct_answer);
-        // displayFailureMessage();
-         delay = 1000;
+        highlightCorrect(current_question.correct_answer, isCorrect);
     }
     
     if(current_index < questions.length - 1) goNextQuestion(delay);
