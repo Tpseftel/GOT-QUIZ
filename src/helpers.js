@@ -34,15 +34,16 @@ function getAjax(url) {
 /**
  * 
  * @param {Array} questions 
- * @param {Number} user_points 
+ * @param {Number} user_stats 
  */
-async function displayResults(questions, user_points) {
+async function displayResults(questions, user_stats) {
     displayQuestions(false);
-    const user_percent = calculatePercentPoints(questions, user_points);
+    const user_percent = calculatePercentPoints(questions, user_stats);
     console.log(`Result Percent ${user_percent}`);
     let result_message = getResultMessage(user_percent);
-    renderResults("result-infos", result_message, user_percent);
-    console.log(`Use points: ${user_points}`);
+    renderResults(result_message, user_percent, user_stats);
+    console.log(`User points: ${user_stats}`);
+    
 }
 
 /** 
@@ -123,31 +124,31 @@ function getUserAnswer(question) {
 
 /**
  * @param {Object} questions 
- * @param {Number} user_points 
+ * @param {Number} user_stats 
  * @return {Number}  
  */
-function calculatePercentPoints(questions, user_points) {
-    console.log(`Calcualte result user points${user_points}`);
-    if(user_points == 0) return 0;
+function calculatePercentPoints(questions, user_stats) {
+    console.log(`Calcualte result user points${user_stats}`);
+    if(user_stats == 0) return 0;
     let all_points = 0 ;
     questions.forEach(question => {
         all_points += question.points;
     });
-    let percent_points = (100 / all_points) * user_points;   
+    let percent_points = (100 / all_points) * user_stats.points;   
 
     return percent_points;
  }
 
  function computeQuestionPoints(isCorrect, current_question) {
     if (isCorrect) {
-        user_points.points += current_question.points;
-        user_points.right_qsts.push(current_question.q_id);
-        console.log(`User Points:${user_points.points}`);
+        user_stats.points += current_question.points;
+        user_stats.right_qsts.push(current_question.q_id);
+        // console.log(`User Points:${user_stats.points}`);
         displaySuccessMessage();
     }
     else {
-        user_points.wrong_qsts.push(current_question.q_id);
-        console.log(`User Points:${user_points.points}`);
+        user_stats.wrong_qsts.push(current_question.q_id);
+        // console.log(`User Points:${user_stats.points}`);
         highlightCorrect(current_question.correct_answer);
         displayFailureMessage();
     }

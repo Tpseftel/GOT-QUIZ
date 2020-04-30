@@ -6,14 +6,14 @@ let quiz;
 let result_messages;
 let current_index ;
 let questions = [];
-let user_points; 
+let user_stats = {}; 
 
 /**
  * Initialize the main quiz interface
 */
 async function initializeUI() {
     current_index = 0;
-    user_points = {
+    user_stats = {
         "wrong_qsts": [],
         "right_qsts": [],
         "points": 0
@@ -77,7 +77,7 @@ function goNextQuestion(delay) {
  * @param {Number} delay Delay before go to the result
  */
 function goResults( delay) {
-    delayFun(() => {displayResults(questions, user_points.points);}, delay);
+    delayFun(() => {displayResults(questions, user_stats);}, delay);
 }
 
 function restartQuiz(){

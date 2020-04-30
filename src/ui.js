@@ -38,7 +38,15 @@ function renderMainUI(quiz_title, quiz_desc, current_index) {
  * @param {Number} index 
  */
 function renderQuestion(index) {
-    document.getElementById("btn-next").style.display= "block";
+    console.log(`Current Index: ${index}`);
+
+    if(index >= questions.length - 1){ // Last Question
+        document.getElementById("btn-next").style.display = "none";
+        document.getElementById("btn-result").style.display = "block";
+    }else{
+        document.getElementById("btn-next").style.display= "block";
+        document.getElementById("btn-result").style.display= "none";
+    }
     document.getElementById("success-box").style.display= "none";
     document.getElementById("failure-box").style.display= "none";
 
@@ -131,17 +139,26 @@ function renderMultipleChoice(container_id, question) {
  * @param {String} container_id 
  * @param {Object} result 
  */
-function renderResults(container_id, result, user_percent) {
-    let container = document.getElementById(container_id);
-    container.innerHTML = '';
-    let domString = `   
-        <div id="result-title">${result.title}</div>
-        <div id="result-message">${result.message} </div>
-        <img src="${result.img}" class="responsive-img" />
-        <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
-    `;
-    let html = parser.parseFromString(domString, 'text/html');
-    container.appendChild(html.documentElement);
+function renderResults(result, user_percent, user_stats) {
+    console.log(user_stats);
+    document.getElementById("result-title").innerHTML = result.title ;
+
+    document.getElementById("wrong-answers").innerHTML =  user_stats.wrong_qsts.length;
+    document.getElementById("correct-answers").innerHTML =  user_stats.right_qsts.length;
+    document.getElementById("result-percent").innerHTML = user_percent + " %";
+    document.getElementById("result-message").innerHTML = result.message;
+    document.getElementById("result-image").src = result.img;
+
+    // let container = document.getElementById(container_id);
+    // container.innerHTML = '';
+    // let domString = `   
+    //     <div id="result-title">${result.title}</div>
+    //     <div id="result-message">${result.message} </div>
+    //     <img src="${result.img}" class="responsive-img" />
+    //     <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
+    // `;
+    // let html = parser.parseFromString(domString, 'text/html');
+    // container.appendChild(html.documentElement);
 }
 
 /**
