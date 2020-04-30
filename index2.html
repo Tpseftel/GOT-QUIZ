@@ -28,8 +28,11 @@
                 <div id=answer-placeholder>
                     Answer 1
                 </div>
-                <button type="button" id="btn-next" onclick="submitAnswer()">Submit</button>
-                <button type="button" id="btn-result" onclick="submitAnswer()">See Results</button>
+            <div class="row">
+                <button type="button" id="btn-next" class="button btn-submit" onclick="submitAnswer()">Submit</button>
+                <button type="button" id="btn-result" class="button btn-res"  onclick="submitAnswer()">See Results</button>
+            </div>
+                
             </div>
             <!-- Possible Answers End -->
         </div>
@@ -51,7 +54,7 @@
             </div>
             <div id="result-message" class="col-12"></div>
             <div class="col-12 image-container" ><img id="result-image" src="">   </div>
-            <button type="button" id="btn-restart" onclick="restartQuiz()">Play Again</button>
+            <button type="button" id="btn-restart" class="button btn-again" onclick="restartQuiz()">Play Again</button>
         </div>
         <!-- Resutl Container End -->
 </div>     
