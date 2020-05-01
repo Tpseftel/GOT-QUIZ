@@ -22,7 +22,9 @@
             <div id="question-tip" class="col-12">
                 I am question tip
             </div>
-            <div class="col-12"><img id="question-img"></div>
+            <div class="col-12">
+                <img id="question-img" class="responsive-image" >
+            </div>
                 
             <!-- Possible Answers -->
             <div id="answer-container" class="col-12">
@@ -43,6 +45,11 @@
         <div id="results-container" class="col-7">
             <h1 class="result-header">Results</h3>
             <div class="col-12">
+               
+            </div>
+            <div id="result-message" class="col-12"></div>
+            <div class="col-12 image-container" >
+                <img id="result-image" class="responsive-image" src="">   
                 <div id="result-data" class="col-12">
                     <h3 id="result-title"></h3>
                     <!-- <div id="result-infos" class="col-6"></div> -->
@@ -68,8 +75,6 @@
                     <div class="col-12">  <span id="result-percent"></span></div>  
                 </div>
             </div>
-            <div id="result-message" class="col-12"></div>
-            <div class="col-12 image-container" ><img id="result-image" src="">   </div>
             <button type="button" id="btn-restart" class="button btn-again" onclick="restartQuiz()">Play Again</button>
         </div>
         <!-- Resutl Container End -->

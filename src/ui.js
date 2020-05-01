@@ -43,9 +43,9 @@ function renderQuestion(index) {
 
     if(index >= questions.length - 1){ // Last Question
         document.getElementById("btn-next").style.display = "none";
-        document.getElementById("btn-result").style.display = "block";
+        document.getElementById("btn-result").style.display = "inline";
     }else{
-        document.getElementById("btn-next").style.display= "block";
+        document.getElementById("btn-next").style.display= "inline";
         document.getElementById("btn-result").style.display= "none";
     }
 
