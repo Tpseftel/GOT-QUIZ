@@ -273,12 +273,24 @@ body{
   border: 1px solid bisque;
   text-align: center;
 }
-
 #results-container {
   border: 2px solid grey;
-  display: none;
-
+  display: grid;
 }
+.result-header {
+  color: #BF616A;
+}
+.stats-label {
+color: #81A1C1;
+}
+.stats-value {
+  color:#88C0D0;
+}
+#result-percent{
+  font-size: xx-large;
+  color: #A3BE8C;
+}
+
 
 .correct-answer {
   font-weight: bold;
@@ -294,6 +306,9 @@ body{
 
 #btn-result {
   display: none;
+}
+.stats-table{
+  display: inline-block;
 }
 
 /* My Css End */

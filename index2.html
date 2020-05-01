@@ -41,16 +41,31 @@
 
         <!-- Resutl Container -->
         <div id="results-container" class="col-7">
-            <h3>Results</h3>
-            <div id="row">
-                <div id="result-data" class="col-6">
+            <h1 class="result-header">Results</h3>
+            <div class="col-12">
+                <div id="result-data" class="col-12">
                     <h3 id="result-title"></h3>
                     <!-- <div id="result-infos" class="col-6"></div> -->
-                    Corect Answers: <span id="correct-answers"></span>  
+                    <table class="stats-table">
+                        <tr>
+                            <td>
+                                <span class="stats-label">Corect Answers:</span>
+                            </td>
+                            <td>
+                                <span id="correct-answers" class="stats-value" ></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="stats-label">Wrong Answers:</span>
+                            </td>
+                            <td>
+                            <span id="wrong-answers" class="stats-value"></span>
+                            </td>
+                        </tr>
+                    </table>
                     <br>
-                    Wrong Answers: <span id="wrong-answers"></span> 
-                    <br>
-                    Percent: <span id="result-percent"></span>  
+                    <div class="col-12">  <span id="result-percent"></span></div>  
                 </div>
             </div>
             <div id="result-message" class="col-12"></div>
