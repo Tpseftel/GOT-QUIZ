@@ -208,7 +208,7 @@ body{
 }
 
 .btn-again {
-  background-color: white;
+  background-color: #8FBCBB;
   color: black;
   border: 2px solid #555555;
 }
@@ -229,14 +229,15 @@ body{
 }
 
 #quiz-title {
-  /* background-color: #3B4252; */
   color: #5E81AC;
-  font-size: xx-large;
+  font-size: 40px;
 }
 
 #quiz-description {
-  /* background-color: #3B4252; */
   color: #81A1C1;
+  font-family: 'Amatic SC';
+  font-size: 22px;
+
 }
 
 .color-main {
@@ -244,13 +245,14 @@ body{
 }
 
 #question-container {
+  font-family: 'ABeeZee';
   display: none;
   justify-items: center;
   background-color: #3B4252;
 }
 
 #question-title {
-  font-size: x-large;
+  font-size: xx-large;
   color: #8FBCBB;
 }
 
@@ -278,6 +280,7 @@ body{
   text-align: center;
 }
 #results-container {
+  font-family: 'ABeeZee';
   display: grid;
   background-color: #3B4252;
 }
@@ -327,6 +330,13 @@ img{
 #result-image {
   width: 70%!important;
   height: auto;
+}
+
+#result-message{
+  color: #A3BE8C;
+}
+#result-title{
+  color: #D08770;
 }
 /* Images End*/
 
