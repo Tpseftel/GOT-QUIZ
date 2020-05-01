@@ -224,7 +224,7 @@ body{
 .main-container {
   justify-items: center;
   display: grid;
-  height: auto;
+  /* height: 500px; */
 
 }
 
@@ -252,7 +252,7 @@ body{
 }
 
 #question-title {
-  font-size: xx-large;
+  font-size: x-large;
   color: #8FBCBB;
 }
 
@@ -322,8 +322,17 @@ img{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   /* text-align: center; */
 }
+.img-answer{
+  display: grid;
+  justify-items: center;
+}
+.answer-master-container{
+  display: grid;
+  justify-items: center;
+}
+
 #question-img {
-  width: 50%!important;
+  width: 65%;
   height: auto;
 }
 

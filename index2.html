@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,35 +9,40 @@
     <link rel="stylesheet" href="./css/styles2.css">
     <title>GOT Quiz</title>
 </head>
+
 <body>
-<div class="main-container col-12">
+    <div class="main-container col-12">
         <div id="quiz-title" class="col-8 main-header"> Game of Thrones Game</div>
-        <div id="quiz-description" class="col-8 main-header" ></div>
+        <div id="quiz-description" class="col-8 main-header"></div>
 
         <!-- Question Container -->
         <div id="question-container" class="col-7">
-            <h5>Question (<span id="current-question">1 </span>/<span id="total-questions">2</span>)</h4>
+            <h5>Question (<span id="current-question">1 </span>/<span id="total-questions">2</span>)</h5>
 
             <div id="question-title" class="col-12">
                 I am question title
             </div>
-            <div id="question-tip" class="col-12">
-                I am question tip
-            </div>
-            <div class="col-12">
-                <img id="question-img" class="responsive-image" >
-            </div>
-                
-            <!-- Possible Answers -->
-            <div id="answer-container" class="col-12">
-                <div id="answer-placeholder" class="col-12">
-                    Answer 1
+            <div class="col-12 img-answer">
+                <div class="col-11" style="padding: unset;">
+                    <img id="question-img" class="responsive-image">
+
+                    <div id="question-tip" class="col-12">
+                        I am question tip
+                    </div>
+                    <!-- Possible Answers -->
+                    <div class="col-12 answer-master-container">
+                        <div id="answer-container" class="col-8">
+
+                            <div id="answer-placeholder" class="col-12">
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             <div class="row">
                 <button type="button" id="btn-next" class="button btn-submit" onclick="submitAnswer()">Submit</button>
-                <button type="button" id="btn-result" class="button btn-res"  onclick="submitAnswer()">Display Results</button>
-            </div>
-                
+                <button type="button" id="btn-result" class="button btn-res" onclick="submitAnswer()">Display
+                    Results</button>
             </div>
             <!-- Possible Answers End -->
         </div>
@@ -45,41 +51,43 @@
         <!-- Resutl Container -->
         <div id="results-container" class="col-7">
             <h1 class="result-header">RESULTS</h3>
-            <div id="result-message" class="col-12"></div>
-            <div class="col-12 image-container" >
-                <img id="result-image" class="responsive-image" src="">   
-                <div id="result-data" class="col-12">
-                    <h3 id="result-title"></h3>
-                    <!-- <div id="result-infos" class="col-6"></div> -->
-                    <table class="stats-table">
-                        <tr>
-                            <td>
-                                <span class="stats-label">Corect Answers:</span>
-                            </td>
-                            <td>
-                                <span id="correct-answers" class="stats-value" ></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="stats-label">Wrong Answers:</span>
-                            </td>
-                            <td>
-                            <span id="wrong-answers" class="stats-value"></span>
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
-                    <div class="col-12">  <span id="result-percent"></span></div>  
+                <div id="result-message" class="col-12"></div>
+                <div class="col-12 image-container">
+                    <img id="result-image" class="responsive-image" src="">
+                    <div id="result-data" class="col-12">
+                        <h3 id="result-title"></h3>
+                        <!-- <div id="result-infos" class="col-6"></div> -->
+                        <table class="stats-table">
+                            <tr>
+                                <td>
+                                    <span class="stats-label">Corect Answers:</span>
+                                </td>
+                                <td>
+                                    <span id="correct-answers" class="stats-value"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="stats-label">Wrong Answers:</span>
+                                </td>
+                                <td>
+                                    <span id="wrong-answers" class="stats-value"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                        <div class="col-12"> <span id="result-percent"></span></div>
+                    </div>
                 </div>
-            </div>
-            <button type="button" id="btn-restart" class="button btn-again" onclick="restartQuiz()">Play Again</button>
+                <button type="button" id="btn-restart" class="button btn-again" onclick="restartQuiz()">Play
+                    Again</button>
         </div>
         <!-- Resutl Container End -->
-</div>     
+    </div>
 
     <script src="./src/helpers.js"></script>
     <script src="./src/ui.js"></script>
     <script src="./src/main.js"></script>
 </body>
+
 </html>

@@ -65,7 +65,7 @@ function renderQuestion(index) {
     if(question.question_type == "mutiplechoice-single") {
         type_message = "There is only one correct answer...";
     }else if(question.question_type == "mutiplechoice-multiple") {
-        type_message =  "There may be more than one correct answers";
+        type_message =  "There may be more than one correct answers...";
     }else {
         type_message = "";
     }
