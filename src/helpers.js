@@ -113,7 +113,7 @@ function validateAnswer(question, answer_id) {
 function getUserAnswer(question) {
     let selected = [];
     const ele = document.getElementsByName(question.question_type); 
-    for(i = 0; i < ele.length; i++) { 
+    for(let i = 0; i < ele.length; i++) { 
         if(ele[i].checked){
             selected.push(ele[i].getAttribute("value"));
         } 
