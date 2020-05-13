@@ -1,17 +1,18 @@
 
 const parser = new DOMParser();
 
-function highlightCorrect(answers_c) {
-    let cor_elements = [];
+function highlightCorrect(answers_c, isCorrect) {
     let el;
-    if(Array.isArray(answers_c)){
+    if(Array.isArray(answers_c)) {
         answers_c.forEach(ans => {
-          el =   document.getElementById(ans);
-          addClass(el,"correct-answers");
+          el = document.getElementById(ans);
+          if (isCorrect) addClass(el, "correct-answer");
+          else addClass(el,"wrong-answer");
         });
-    }else {
+    } else {
         el = document.getElementById(answers_c);
-         addClass(el,"correct-answers");
+        if (isCorrect) addClass(el, "correct-answer");
+        else addClass(el, "wrong-answer");
     }
 
     function addClass(element, class_name) {
@@ -20,7 +21,7 @@ function highlightCorrect(answers_c) {
         if (arr.indexOf(class_name) == -1) {
           element.className += " " + class_name;
         }
-      }
+    }
 }
 
 /**
@@ -30,17 +31,23 @@ function highlightCorrect(answers_c) {
  * @param {Number} current_index 
  */
 function renderMainUI(quiz_title, quiz_desc, current_index) {
-    document.getElementById("main-title").innerHTML = quiz_title;
-    document.getElementById("main-desc").innerHTML = quiz_desc;
+    document.getElementById("quiz-title").innerHTML = quiz_title;
+    document.getElementById("quiz-description").innerHTML = quiz_desc;
     renderQuestion(current_index);
 }
 /**
  * @param {Number} index 
  */
 function renderQuestion(index) {
-    document.getElementById("btn-next").style.display= "block";
-    document.getElementById("success-box").style.display= "none";
-    document.getElementById("failure-box").style.display= "none";
+    console.log(`Current Index: ${index}`);
+
+    if(index >= questions.length - 1){ // Last Question
+        document.getElementById("btn-next").style.display = "none";
+        document.getElementById("btn-result").style.display = "inline";
+    }else{
+        document.getElementById("btn-next").style.display= "inline";
+        document.getElementById("btn-result").style.display= "none";
+    }
 
     document.getElementById("current-question").innerHTML = index + 1;
     document.getElementById("total-questions").innerHTML = questions.length;
@@ -53,19 +60,19 @@ function renderQuestion(index) {
     image.setAttribute("height", 200);
     image.setAttribute("class", "responsive-img");
     
-    document.getElementById("qtitle").innerHTML = question.title;
+    document.getElementById("question-title").innerHTML = question.title;
     let type_message = "";
     if(question.question_type == "mutiplechoice-single") {
         type_message = "There is only one correct answer...";
     }else if(question.question_type == "mutiplechoice-multiple") {
-        type_message =  "There may be more than one correct answers";
+        type_message =  "There may be more than one correct answers...";
     }else {
         type_message = "";
     }
-    document.getElementById("qtype").innerHTML = type_message;
+    document.getElementById("question-tip").innerHTML = type_message;
     
     // Render possible answers
-    const question_container = "qanswers";
+    const question_container = "answer-placeholder";
     if (question.question_type == "mutiplechoice-single" || question.question_type == "mutiplechoice-multiple") {
         renderMultipleChoice(question_container, question);
     } else {
@@ -94,11 +101,11 @@ function renderTruefalse(container_id) {
             <span class="checkmark"></span>
         </label>
     `;
-    let htmlFalse = parser.parseFromString(falseDomString, 'text/html'); 
-    let htmlTrue = parser.parseFromString(trueDomString, 'text/html'); 
+    let htmlFalse = parser.parseFromString(falseDomString, 'text/html').body.children[0]; 
+    let htmlTrue = parser.parseFromString(trueDomString, 'text/html').body.children[0]; 
 
-    container.appendChild(htmlTrue.documentElement);
-    container.appendChild(htmlFalse.documentElement);
+    container.appendChild(htmlTrue);
+    container.appendChild(htmlFalse);
 }
 
 /**
@@ -121,8 +128,8 @@ function renderMultipleChoice(container_id, question) {
             </label>
             </br>
         `;
-        let html = parser.parseFromString(domString, 'text/html'); 
-        container.appendChild(html.documentElement);
+        let html = parser.parseFromString(domString, 'text/html').body.children[0]; 
+        container.appendChild(html);
     });
 }
 
@@ -131,17 +138,13 @@ function renderMultipleChoice(container_id, question) {
  * @param {String} container_id 
  * @param {Object} result 
  */
-function renderResults(container_id, result, user_percent) {
-    let container = document.getElementById(container_id);
-    container.innerHTML = '';
-    let domString = `   
-        <div id="result-title">${result.title}</div>
-        <div id="result-message">${result.message} </div>
-        <img src="${result.img}" class="responsive-img" />
-        <div id="result-percent">Player Achieved Percent: <span color="red">${user_percent}% <span></div>
-    `;
-    let html = parser.parseFromString(domString, 'text/html');
-    container.appendChild(html.documentElement);
+function renderResults(result, user_percent, user_stats) {
+    document.getElementById("result-title").innerHTML = result.title ;
+    document.getElementById("wrong-answers").innerHTML =  user_stats.wrong_qsts.length;
+    document.getElementById("correct-answers").innerHTML =  user_stats.right_qsts.length;
+    document.getElementById("result-percent").innerHTML = user_percent + " %";
+    document.getElementById("result-message").innerHTML = result.message;
+    document.getElementById("result-image").src = result.img;
 }
 
 /**
@@ -150,20 +153,11 @@ function renderResults(container_id, result, user_percent) {
  */
 function displayQuestions(confirm) {
     if(confirm) {
-        document.getElementById("results-placeholder").style.display= "none";
-        document.getElementById("questions-placeholder").style.display= "block";
+        document.getElementById("results-container").style.display= "none";
+        document.getElementById("question-container").style.display= "block";
     }else {
          // Display results content
-        document.getElementById("questions-placeholder").style.display= "none";
-        document.getElementById("results-placeholder").style.display= "block";
+         document.getElementById("question-container").style.display= "none";
+         document.getElementById("results-container").style.display= "block";
     }
-}
-
-function displaySuccessMessage() {
-    document.getElementById("btn-next").style.display= "none";
-    document.getElementById("success-box").style.display= "block";    
-}
-function displayFailureMessage() {
-    document.getElementById("btn-next").style.display= "none";
-    document.getElementById("failure-box").style.display= "block";    
 }

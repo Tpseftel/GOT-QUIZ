@@ -13,7 +13,6 @@ async function retrieveData(url) {
 }
 
 /**
- * 
  * @param {String} url endpoint url 
  */
 function getAjax(url) {
@@ -34,16 +33,16 @@ function getAjax(url) {
 
 /**
  * 
- * @param {Object} questions 
- * @param {Number} user_points 
+ * @param {Array} questions 
+ * @param {Number} user_stats 
  */
-async function displayResults(questions, user_points) {
+async function displayResults(questions, user_stats) {
     displayQuestions(false);
-    const user_percent = calculatePercentPoints(questions, user_points);
+    const user_percent = calculatePercentPoints(questions, user_stats);
     console.log(`Result Percent ${user_percent}`);
     let result_message = getResultMessage(user_percent);
-    renderResults("result-infos", result_message, user_percent);
-    console.log(`Use points: ${user_points}`);
+    renderResults(result_message, user_percent, user_stats);
+    console.log(`User points: ${user_stats}`);
 }
 
 /** 
@@ -65,22 +64,21 @@ function getResultMessage(user_result) {
     console.log(`message_p:${message_p}`);
     return message_p;
 }
+
 /**
- * 
+ * Validates if the answer is correct
  * @param {Object} question Question object
- * @param {String} answer_id  The id of the user's answer
+ * @param {Array} answer_id  The id of the user's answer
  * @returns {Boolean}
  */
-function validateAnswer(question, answer_id){
+function validateAnswer(question, answer_id) {
+    const type = question.question_type;
     let isCorrect = false;
-        if (question.question_type == "mutiplechoice-single") {
-            if (answer_id == question.correct_answer) isCorrect = true;
-        }
-        else if(question.question_type == "mutiplechoice-multiple") {
+        if (type == "mutiplechoice-single" || type == "truefalse") {
+            if (answer_id[0].localeCompare(question.correct_answer) == 0) isCorrect = true;
+        } else {
             if(areArraysEqualSets(answer_id, question.correct_answer)) isCorrect = true;
-        }else { //Case truefalse 
-            if (answer_id.localeCompare(question.correct_answer) == 0) isCorrect = true;
-        } 
+        }
     return isCorrect;
 
     function areArraysEqualSets(a1, a2) {
@@ -108,48 +106,55 @@ function validateAnswer(question, answer_id){
 }
 
 /**
+ * Retrieves User Answer
  * @param {Object} question 
  * returns {String}
  */
 function getUserAnswer(question) {
-    let type =  question.question_type;
-    if(type === "mutiplechoice-single") {
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
-            return ele[i].getAttribute("value");
-        } 
-    }else if(type === "mutiplechoice-multiple") {
-        let selected = [];
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
+    let selected = [];
+    const ele = document.getElementsByName(question.question_type); 
+    for(i = 0; i < ele.length; i++) { 
+        if(ele[i].checked){
             selected.push(ele[i].getAttribute("value"));
-        }
-        return selected; 
-    }else { 
-        const ele = document.getElementsByName(type); 
-        for(i = 0; i < ele.length; i++) { 
-            if(ele[i].checked) 
-            return ele[i].getAttribute("value");
         } 
-    }
+    } 
+    return selected;
 }
 
 /**
- * 
  * @param {Object} questions 
- * @param {Number} user_points 
+ * @param {Number} user_stats 
  * @return {Number}  
  */
-function calculatePercentPoints(questions, user_points) {
-    console.log(`Calcualte result user points${user_points}`);
-    if(user_points == 0) return 0;
+function calculatePercentPoints(questions, user_stats) {
+    console.log(`Calcualte result user points${user_stats}`);
+    if(user_stats == 0) return 0;
     let all_points = 0 ;
     questions.forEach(question => {
         all_points += question.points;
     });
-    let percent_points = (100 / all_points) * user_points;   
+    let percent_points = (100 / all_points) * user_stats.points;   
 
     return percent_points;
  }
+
+ function computeQuestionPoints(isCorrect, current_question) {
+    if (isCorrect) {
+        user_stats.points += current_question.points;
+        user_stats.right_qsts.push(current_question.q_id);
+    }
+    else user_stats.wrong_qsts.push(current_question.q_id);
+}
+
+/**
+ * Set timeout to run a function
+ * @param {Function} fun 
+ * @param {Number} delay 
+ */
+async function delayFun(fun, delay) { 
+    return new Promise(function(resolve, reject) { 
+        setTimeout(resolve, delay); 
+    }).then(function() { 
+        fun();
+    });
+}
