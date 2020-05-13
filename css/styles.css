@@ -270,6 +270,8 @@ body{
   height: auto;
 }
 #results-container{
+  font-family: 'ABeeZee';
+  background-color: #3B4252;
   display: none;
   max-width: 600px;
   border-radius: 8px;
@@ -279,11 +281,7 @@ body{
 #answer-placeholder {
   text-align: center;
 }
-#results-container {
-  font-family: 'ABeeZee';
-  display: grid;
-  background-color: #3B4252;
-}
+
 .result-header {
   color: #BF616A;
 }
