@@ -44,14 +44,14 @@ function renderQuestion(index) {
     if(index >= questions.length - 1){ // Last Question
         document.getElementById("btn-next").style.display = "none";
         document.getElementById("btn-result").style.display = "inline";
-    }else{
+    } else {
         document.getElementById("btn-next").style.display= "inline";
         document.getElementById("btn-result").style.display= "none";
     }
 
     document.getElementById("current-question").innerHTML = index + 1;
     document.getElementById("total-questions").innerHTML = questions.length;
-    //FIXME: Make questions parameter and not use the global!!! 
+
     let question = questions[index];
     let bg_image = question.img;
     let image = document.getElementById("question-img");

@@ -1,7 +1,3 @@
-// TODO: Use Local Storage for current question, score  and more
-const url_quiz = 'http://proto.io/en/jobs/candidate-questions/quiz.json' ;
-const url_results = 'http://proto.io/en/jobs/candidate-questions/result.json' ;
-
 let quiz;
 let result_messages;
 let current_index ;
@@ -21,12 +17,19 @@ async function initializeUI() {
     try { 
         // Prevent reload data on play again
         if (!quiz){
-            quiz = await retrieveData(url_quiz);
+            // Load data from third party Api
+            // quiz = await retrieveData(url_quiz);
+            
+            // Load quiz data from data.js file 
+            quiz = static_quiz;
         }
         if(!result_messages) {
-        let  result = await retrieveData(url_results);
-        console.log(result.quiz_id);
-        console.log(quiz.quiz_id);
+        // Load data from third party Api
+        // let  result = await retrieveData(url_results);
+
+        // Load results from data.js
+        let  result = static_results;
+        
             if(result.quiz_id == quiz.quiz_id) {
                 result_messages = result;
             }
