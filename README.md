@@ -6,4 +6,4 @@ It is made off:
 + **CSS**
 + **Pure Javascript**
 
-*Color Pallete*: **[NORD]("https://github.com/arcticicestudio/nord")**.
+*Color Pallete*: [NORD]("https://github.com/arcticicestudio/nord").
